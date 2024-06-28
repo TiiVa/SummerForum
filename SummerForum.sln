@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{563CD2AE-8A08-4B10-95B2-D3B07C055ACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{A1C693C7-C189-4FE0-9FA5-894B78D4B2F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{0B32D6D0-D7DF-409D-BAEB-E4E04D3B56C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{C837EE72-1D22-44CF-B0EC-BC7332D24872}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.Api", "src\Backend\SummerForum.Api\SummerForum.Api.csproj", "{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.Api.DataAccess", "src\Backend\SummerForum.Api.DataAccess\SummerForum.Api.DataAccess.csproj", "{786BFF5D-7B0E-4675-B856-2FF0E31549F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.DataTransferContract", "src\Shared\SummerForum.DataTransferContract\SummerForum.DataTransferContract.csproj", "{A2DD28C3-8BB4-404B-BB96-3808721133AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SummerForum.CommonInterfaces", "src\Shared\SummerForum.CommonInterfaces\SummerForum.CommonInterfaces.csproj", "{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786BFF5D-7B0E-4675-B856-2FF0E31549F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786BFF5D-7B0E-4675-B856-2FF0E31549F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786BFF5D-7B0E-4675-B856-2FF0E31549F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786BFF5D-7B0E-4675-B856-2FF0E31549F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2DD28C3-8BB4-404B-BB96-3808721133AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2DD28C3-8BB4-404B-BB96-3808721133AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2DD28C3-8BB4-404B-BB96-3808721133AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2DD28C3-8BB4-404B-BB96-3808721133AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A1C693C7-C189-4FE0-9FA5-894B78D4B2F5} = {563CD2AE-8A08-4B10-95B2-D3B07C055ACC}
+		{0B32D6D0-D7DF-409D-BAEB-E4E04D3B56C2} = {563CD2AE-8A08-4B10-95B2-D3B07C055ACC}
+		{C837EE72-1D22-44CF-B0EC-BC7332D24872} = {563CD2AE-8A08-4B10-95B2-D3B07C055ACC}
+		{246C49A5-CB67-4DF6-92F9-8F4EDDF4AFBA} = {A1C693C7-C189-4FE0-9FA5-894B78D4B2F5}
+		{786BFF5D-7B0E-4675-B856-2FF0E31549F2} = {A1C693C7-C189-4FE0-9FA5-894B78D4B2F5}
+		{A2DD28C3-8BB4-404B-BB96-3808721133AB} = {C837EE72-1D22-44CF-B0EC-BC7332D24872}
+		{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13} = {C837EE72-1D22-44CF-B0EC-BC7332D24872}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5FF8E4F6-D017-4263-A747-0D37163F8F15}
+	EndGlobalSection
+EndGlobal

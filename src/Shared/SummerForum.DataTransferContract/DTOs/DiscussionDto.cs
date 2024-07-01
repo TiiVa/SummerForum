@@ -1,13 +1,13 @@
 ﻿using SummerForum.CommonInterfaces;
 using SummerForum.DataTransferContract.SummerForumContracts;
 
-namespace SummerForum.Api.DataAccess.Entities;
+namespace SummerForum.DataTransferContract.DTOs;
 
-public class Discussion : IDiscussion, IEntity<int>
+public class DiscussionDto : IEntity<int>
 {
 	public int Id { get; set; }
 	public string Description { get; set; }
 	public bool IsActive { get; set; }
-	public virtual List<IPost> Posts { get; set; }
-	public IDepartment Department { get; set; }
+	public List<PostDto> Posts { get; set; }
+	public DepartmentDto Department { get; set; }
 }

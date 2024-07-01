@@ -1,29 +1,33 @@
 ﻿using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
+using SummerForum.CommonInterfaces;
+using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Api.DataAccess.Repositories;
 
-public class DepartmentRepository : IDepartmentRepository
+public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRepository
 {
-    public async Task<Department> GetByIdAsync(int id)
+    public async Task<DepartmentDto> GetByIdAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Department>> GetManyAsync(int start, int count)
+    async Task<IEnumerable<DepartmentDto>> IRepository<DepartmentDto, int>.GetManyAsync(int start, int count)
     {
-        throw new NotImplementedException();
+	    throw new NotImplementedException();
     }
 
-    public async Task AddOneAsync(Department item)
+    public async Task AddOneAsync(DepartmentDto item)
     {
-        throw new NotImplementedException();
+	    throw new NotImplementedException();
     }
 
-    public async Task UpdateOneAsync(Department item)
+    public async Task UpdateOneAsync(DepartmentDto item)
     {
-        throw new NotImplementedException();
+	    throw new NotImplementedException();
     }
+
+    
 
     public async Task DeleteOneAsync(int id)
     {

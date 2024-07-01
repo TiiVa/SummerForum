@@ -10,4 +10,8 @@
     <Folder Include="SummerForumContracts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SummerForum.CommonInterfaces\SummerForum.CommonInterfaces.csproj" />
+  </ItemGroup>
+
 </Project>

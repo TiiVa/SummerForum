@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.Api.DataAccess"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.DataTransferContract", "src\Shared\SummerForum.DataTransferContract\SummerForum.DataTransferContract.csproj", "{A2DD28C3-8BB4-404B-BB96-3808721133AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SummerForum.CommonInterfaces", "src\Shared\SummerForum.CommonInterfaces\SummerForum.CommonInterfaces.csproj", "{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummerForum.CommonInterfaces", "src\Shared\SummerForum.CommonInterfaces\SummerForum.CommonInterfaces.csproj", "{3B6D33B5-6E70-44A3-92B0-5D1A76F30A13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

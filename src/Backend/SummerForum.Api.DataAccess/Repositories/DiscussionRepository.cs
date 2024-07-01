@@ -1,26 +1,27 @@
 ﻿using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
+using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Api.DataAccess.Repositories;
 
-public class DiscussionRepository : IDiscussionRepository
+public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRepository
 {
-	public async Task<Discussion> GetByIdAsync(int id)
+	public async Task<DiscussionDto> GetByIdAsync(int id)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task<IEnumerable<Discussion>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task AddOneAsync(Discussion item)
+	public async Task AddOneAsync(DiscussionDto item)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task UpdateOneAsync(Discussion item)
+	public async Task UpdateOneAsync(DiscussionDto item)
 	{
 		throw new NotImplementedException();
 	}

@@ -1,26 +1,27 @@
 ﻿using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
+using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Api.DataAccess.Repositories;
 
-public class PostRepository : IPostRepository
+public class PostRepository(SummerForumDbContext context) : IPostRepository
 {
-	public async Task<Post> GetByIdAsync(int id)
+	public async Task<PostDto> GetByIdAsync(int id)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task<IEnumerable<Post>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task AddOneAsync(Post item)
+	public async Task AddOneAsync(PostDto item)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task UpdateOneAsync(Post item)
+	public async Task UpdateOneAsync(PostDto item)
 	{
 		throw new NotImplementedException();
 	}

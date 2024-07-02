@@ -9,7 +9,7 @@ public class User : IUser, IEntity<int>
 	public string UserName { get; set; }
 	public string Password { get; set; }
 	public string Email { get; set; }
-	public virtual List<IPost> Posts { get; set; }
-	public virtual List<IReply> Replies { get; set; }
+	public virtual List<Post> Posts { get; set; } = new();
+	public virtual List<Reply> Replies { get; set; } = new();
 	public bool IsActive { get; set; }
 }

@@ -9,7 +9,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 {
 	public async Task<ReplyDto> GetByIdAsync(int id)
 	{
-		var reply = await context.Replies.FindAsync(id);
+		var reply = await context.Replies.Include(r => r.RepliedBy).SingleOrDefaultAsync(r => r.Id == id);
 
 		if (reply is null)
 		{

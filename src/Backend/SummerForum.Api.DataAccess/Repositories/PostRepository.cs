@@ -29,13 +29,27 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 				Password = post.StartedBy.Password,
 				IsActive = post.StartedBy.IsActive
 			},
-			Replies = post.Replies.Select(r => new ReplyDto
+			Replies = post.ListOfReplies.Select(r => new ReplyDto
 			{
 				Id = r.Id,
 				Text = r.Text,
 				RepliedAt = r.RepliedAt,
 				IsActive = r.IsActive
-			}).ToList()
+			}).ToList(),
+			IsActive = post.IsActive,
+			Description = post.Description,
+			Discussion = new DiscussionDto
+			{
+				Id = post.Discussion.Id,
+				Description = post.Discussion.Description,
+				IsActive = post.Discussion.IsActive,
+				Department = new DepartmentDto
+				{
+					Id = post.Discussion.Department.Id,
+					Description = post.Discussion.Department.Description
+				}
+			}
+			
 		};
 
 		return postToReturn;
@@ -43,7 +57,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
-		var posts = await context.Posts.Skip(0).Take(0).ToListAsync();
+		var posts = await context.Posts.Skip(start).Take(count).ToListAsync();
 
 		var postsToReturn = posts.Select(p => new PostDto
 		{
@@ -58,7 +72,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 				Password = p.StartedBy.Password,
 				IsActive = p.StartedBy.IsActive
 			},
-			Replies = p.Replies.Select(r => new ReplyDto
+			Replies = p.ListOfReplies.Select(r => new ReplyDto
 			{
 				Id = r.Id,
 				Text = r.Text,
@@ -77,7 +91,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			Text = item.Text,
 			StartedBy = await context.Users.FindAsync(item.StartedBy.Id),
 			StartedAt = item.StartedAt,
-			Replies = null
+			ListOfReplies = null
 		};
 
 		await context.Posts.AddAsync(post);

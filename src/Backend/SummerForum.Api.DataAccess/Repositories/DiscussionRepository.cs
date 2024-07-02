@@ -13,7 +13,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			.Include(d => d.Posts)
 			.ThenInclude(p => p.StartedBy)  // Include the StartedBy property
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.Replies)  // Include Replies
+			.ThenInclude(p => p.ListOfReplies)  // Include ListOfReplies
 			.Where(d => d.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -41,7 +41,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 					Password = p.StartedBy.Password,
 					IsActive = p.StartedBy.IsActive
 				},
-				Replies = p.Replies.Select(r => new ReplyDto
+				Replies = p.ListOfReplies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,
@@ -59,9 +59,9 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	{
 		var discussions = await context.Discussions
 			.Include(p => p.Posts)
-			.ThenInclude(r => r.Replies)
-			.Skip(0)
-			.Take(0)
+			.ThenInclude(r => r.ListOfReplies)
+			.Skip(start)
+			.Take(count)
 			.ToListAsync();
 
 		var discussionsToReturn = discussions.Select(d => new DiscussionDto
@@ -82,7 +82,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 					Password = p.StartedBy.Password,
 					IsActive = p.StartedBy.IsActive
 				},
-				Replies = p.Replies.Select(r => new ReplyDto
+				Replies = p.ListOfReplies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,

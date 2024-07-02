@@ -21,9 +21,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		{
 			Id = department.Id,
 			Description = department.Description,
-			Discussions = await context.Discussions.Include(p => p.Posts)
-				.ThenInclude(r => r.Replies)
-				.Where(d => d.Department.Id == department.Id)
+			Discussions = await context.Discussions.Include(p => p.Posts).Where(d => d.Department.Id == department.Id)
 				.Select(d => new DiscussionDto
 				{
 					Id = d.Id,
@@ -42,7 +40,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 							Password = p.StartedBy.Password,
 							IsActive = p.StartedBy.IsActive
 						},
-						Replies = p.Replies.Select(r => new ReplyDto
+						Replies = p.ListOfReplies.Select(r => new ReplyDto
 						{
 							Id = r.Id,
 							Text = r.Text,
@@ -56,12 +54,19 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		return departmentToReturn;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="start"></param>
+	/// <param name="count"></param>
+	/// <returns>Collection of departments in specified range</returns>
+
 	public async Task<IEnumerable<DepartmentDto>> GetManyAsync(int start, int count)
 	{
 		var departments = await context.Departments
 			.Include(d => d.Discussions)
 			.ThenInclude(p => p.Posts)
-			.ThenInclude(r => r.Replies)
+			.ThenInclude(r => r.ListOfReplies)
 			.Skip(start)
 			.Take(count)
 			.ToListAsync();
@@ -88,7 +93,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 						Password = r.StartedBy.Password,
 						IsActive = r.StartedBy.IsActive
 					},
-					Replies = r.Replies.Select(r => new ReplyDto
+					Replies = r.ListOfReplies.Select(r => new ReplyDto
 					{
 						Id = r.Id,
 						Text = r.Text,

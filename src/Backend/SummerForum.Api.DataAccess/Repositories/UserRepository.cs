@@ -31,7 +31,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 				Text = p.Text,
 				StartedAt = p.StartedAt,
 
-				Replies = p.Replies.Select(r => new ReplyDto
+				Replies = p.ListOfReplies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,
@@ -62,7 +62,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 				Text = p.Text,
 				StartedAt = p.StartedAt,
 
-				Replies = p.Replies.Select(r => new ReplyDto
+				Replies = p.ListOfReplies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,

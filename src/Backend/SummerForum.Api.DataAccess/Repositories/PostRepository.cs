@@ -1,4 +1,5 @@
-﻿using SummerForum.Api.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
@@ -8,26 +9,108 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 {
 	public async Task<PostDto> GetByIdAsync(int id)
 	{
-		throw new NotImplementedException();
+		var post = await context.Posts.FindAsync(id);
+
+		if (post is null)
+		{
+			return new PostDto();
+		}
+
+		var postToReturn = new PostDto
+		{
+			Id = post.Id,
+			Text = post.Text,
+			StartedAt = post.StartedAt,
+			StartedBy = new UserDto
+			{
+				Id = post.StartedBy.Id,
+				UserName = post.StartedBy.UserName,
+				Email = post.StartedBy.Email,
+				Password = post.StartedBy.Password,
+				IsActive = post.StartedBy.IsActive
+			},
+			Replies = post.Replies.Select(r => new ReplyDto
+			{
+				Id = r.Id,
+				Text = r.Text,
+				RepliedAt = r.RepliedAt,
+				IsActive = r.IsActive
+			}).ToList()
+		};
+
+		return postToReturn;
 	}
 
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
-		throw new NotImplementedException();
+		var posts = await context.Posts.Skip(0).Take(0).ToListAsync();
+
+		var postsToReturn = posts.Select(p => new PostDto
+		{
+			Id = p.Id,
+			Text = p.Text,
+			StartedAt = p.StartedAt,
+			StartedBy = new UserDto
+			{
+				Id = p.StartedBy.Id,
+				UserName = p.StartedBy.UserName,
+				Email = p.StartedBy.Email,
+				Password = p.StartedBy.Password,
+				IsActive = p.StartedBy.IsActive
+			},
+			Replies = p.Replies.Select(r => new ReplyDto
+			{
+				Id = r.Id,
+				Text = r.Text,
+				RepliedAt = r.RepliedAt,
+				IsActive = r.IsActive
+			}).ToList()
+		}).ToList();
+
+		return postsToReturn;
 	}
 
 	public async Task AddOneAsync(PostDto item)
 	{
-		throw new NotImplementedException();
+		var post = new Post
+		{
+			Text = item.Text,
+			StartedBy = await context.Users.FindAsync(item.StartedBy.Id),
+			StartedAt = item.StartedAt,
+			Replies = null
+		};
+
+		await context.Posts.AddAsync(post);
+		await context.SaveChangesAsync();
 	}
 
 	public async Task UpdateOneAsync(PostDto item)
 	{
-		throw new NotImplementedException();
+		var oldPost = await context.Posts.FindAsync(item.Id);
+
+		if (oldPost is null)
+		{
+			return;
+		}
+
+		oldPost.Text = item.Text;
+		oldPost.StartedAt = item.StartedAt;
+		oldPost.StartedBy = await context.Users.FindAsync(item.StartedBy.Id);
+		oldPost.IsActive = item.IsActive;
+		
+		await context.SaveChangesAsync();
 	}
 
 	public async Task DeleteOneAsync(int id)
 	{
-		throw new NotImplementedException();
+		var postToDelete = await context.Posts.FindAsync(id);
+
+		if (postToDelete is null)
+		{
+			return;
+		}
+
+		context.Posts.Remove(postToDelete);
+		await context.SaveChangesAsync();
 	}
 }

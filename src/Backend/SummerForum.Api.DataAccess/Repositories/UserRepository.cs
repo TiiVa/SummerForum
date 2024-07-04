@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
+using SummerForum.DataTransferContract.SummerForumContracts;
 
 namespace SummerForum.Api.DataAccess.Repositories;
 
@@ -10,15 +11,15 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 {
 	public async Task<UserDto> GetByIdAsync(int id)
 	{
-		var user = await context.Users.FindAsync(id);
+		var user = await context.Users.FindAsync(id); 
+			
 		
-
 		if (user is null)
 		{
 			return new UserDto();
 		}
 
-		var userToReturn = new UserDto
+		return new UserDto
 		{
 			Id = user.Id,
 			UserName = user.UserName,
@@ -29,25 +30,16 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			{
 				Id = p.Id,
 				Text = p.Text,
-				StartedAt = p.StartedAt,
-
-				Replies = p.ListOfReplies.Select(r => new ReplyDto
-				{
-					Id = r.Id,
-					Text = r.Text,
-					RepliedAt = r.RepliedAt,
-					IsActive = r.IsActive
-				}).ToList()
+				StartedAt = p.StartedAt
 			}).ToList()
-			
 		};
 
-		return userToReturn;
+		
 	}
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var users = await context.Users.Skip(0).Take(0).ToListAsync();
+		var users = await context.Users.Skip(start).Take(count).ToListAsync();
 
 		var usersToReturn = users.Select(u => new UserDto
 		{
@@ -60,15 +52,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			{
 				Id = p.Id,
 				Text = p.Text,
-				StartedAt = p.StartedAt,
-
-				Replies = p.ListOfReplies.Select(r => new ReplyDto
-				{
-					Id = r.Id,
-					Text = r.Text,
-					RepliedAt = r.RepliedAt,
-					IsActive = r.IsActive
-				}).ToList()
+				StartedAt = p.StartedAt
 			}).ToList()
 		}).ToList();
 
@@ -83,6 +67,9 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Email = item.Email,
 			Password = item.Password
 		};
+
+		await context.Users.AddAsync(userToAdd);
+		await context.SaveChangesAsync();
 	}
 
 	public async Task UpdateOneAsync(UserDto item)

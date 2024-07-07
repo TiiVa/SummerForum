@@ -75,9 +75,9 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateOneAsync(ReplyDto item)
+	public async Task UpdateOneAsync(ReplyDto item, int id)
 	{
-		var oldReply = await context.Replies.FindAsync(item.Id);
+		var oldReply = await context.Replies.FindAsync(id);
 
 		if (oldReply is null)
 		{

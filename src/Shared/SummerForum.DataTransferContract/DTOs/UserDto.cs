@@ -9,6 +9,6 @@ public class UserDto : IEntity<int>
 	public string UserName { get; set; }
 	public string Password { get; set; }
 	public string Email { get; set; }
-	public List<PostDto> Posts { get; set; } // tagit bort List<Replies>
+	public List<PostDto> Posts { get; set; } = new();// tagit bort List<Replies>
 	public bool IsActive { get; set; }
 }

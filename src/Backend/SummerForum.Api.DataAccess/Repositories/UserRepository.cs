@@ -11,30 +11,49 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 {
 	public async Task<UserDto> GetByIdAsync(int id)
 	{
-		var user = await context.Users.FindAsync(id); 
-			
+		var user = await context.Users.Include(u => u.Posts).FirstOrDefaultAsync(c => c.Id == id);		
 		
 		if (user is null)
 		{
 			return new UserDto();
 		}
 
-		return new UserDto
+		var posts = new List<PostDto>();
+
+		foreach (var post in user.Posts)
+		{
+			var getPost = await context.Posts.FindAsync(post.Id);
+
+			posts.Add(new PostDto
+			{
+				Id = getPost.Id,
+				Text = getPost.Text,
+				StartedAt = getPost.StartedAt,
+				StartedBy = new UserDto()
+				{
+					Id = post.StartedBy.Id,
+					UserName = post.StartedBy.UserName,
+					Email = post.StartedBy.Email,
+					Password = post.StartedBy.Password,
+					IsActive = post.StartedBy.IsActive
+
+				},
+
+			});
+		}
+
+		var userById = new UserDto
 		{
 			Id = user.Id,
 			UserName = user.UserName,
 			Email = user.Email,
 			Password = user.Password,
 			IsActive = user.IsActive,
-			Posts = user.Posts.Select(p => new PostDto
-			{
-				Id = p.Id,
-				Text = p.Text,
-				StartedAt = p.StartedAt
-			}).ToList()
+			Posts = posts
 		};
 
-		
+		return userById;
+
 	}
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
@@ -72,9 +91,9 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateOneAsync(UserDto item)
+	public async Task UpdateOneAsync(UserDto item, int id)
 	{
-		var oldUser = await context.Users.FindAsync(item.Id);
+		var oldUser = await context.Users.FindAsync(id);
 
 		if (oldUser is null)
 		{

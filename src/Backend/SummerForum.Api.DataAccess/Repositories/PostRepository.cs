@@ -98,9 +98,9 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateOneAsync(PostDto item)
+	public async Task UpdateOneAsync(PostDto item, int id)
 	{
-		var oldPost = await context.Posts.FindAsync(item.Id);
+		var oldPost = await context.Posts.FindAsync(id);
 
 		if (oldPost is null)
 		{

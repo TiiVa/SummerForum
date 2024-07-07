@@ -112,9 +112,9 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateOneAsync(DiscussionDto item)
+	public async Task UpdateOneAsync(DiscussionDto item, int id)
 	{
-		var oldDiscussion = await context.Discussions.FindAsync(item.Id);
+		var oldDiscussion = await context.Discussions.FindAsync(id);
 
 		if (oldDiscussion is null)
 		{

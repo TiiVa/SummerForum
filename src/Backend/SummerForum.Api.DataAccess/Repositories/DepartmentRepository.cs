@@ -118,9 +118,9 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		await context.SaveChangesAsync();
 	}
 
-	public async Task UpdateOneAsync(DepartmentDto item)
+	public async Task UpdateOneAsync(DepartmentDto item, int id)
 	{
-		var oldDepartment = await context.Departments.FindAsync(item.Id);
+		var oldDepartment = await context.Departments.FindAsync(id);
 		
 		if(oldDepartment is null)
 		{

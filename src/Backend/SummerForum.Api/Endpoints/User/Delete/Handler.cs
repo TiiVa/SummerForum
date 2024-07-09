@@ -14,9 +14,9 @@ public class Handler(IUserRepository repo) : Endpoint<Request, EmptyResponse>
 
 	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
-		var allUsers = await repo.GetManyAsync(0, 0);
+		var userToDelete = await repo.GetByIdAsync(req.Id);
 
-		if (!allUsers.Any(u => u.Id.Equals(req.Id)))
+		if (userToDelete is null)
 		{
 			return TypedResults.BadRequest();
 		}

@@ -58,7 +58,8 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var users = await context.Users.Skip(start).Take(count).ToListAsync();
+		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).ToListAsync(); // Lagt till where för att filtrera bort
+                                                                                                        // users som har prop IsActive satt till false
 
 		var usersToReturn = users.Select(u => new UserDto
 		{
@@ -118,7 +119,9 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			return;
 		}
 		
-		context.Users.Remove(userToDelete);
+		var entityEntry = context.Users.Update(userToDelete);
+		entityEntry.Property(u => u.IsActive).CurrentValue = false;
+
 		await context.SaveChangesAsync();
 	}
 }

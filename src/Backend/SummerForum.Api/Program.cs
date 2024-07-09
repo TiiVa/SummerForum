@@ -1,9 +1,6 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using SummerForum.Api.DataAccess;
-using SummerForum.Api.DataAccess.Entities;
-using SummerForum.Api.DataAccess.RepositoryInterfaces;
-using SummerForum.DataTransferContract.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 

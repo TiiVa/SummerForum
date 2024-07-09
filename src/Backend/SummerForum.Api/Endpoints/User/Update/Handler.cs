@@ -22,8 +22,13 @@ public class Handler(IUserRepository repo) : Endpoint<Request, Results<Ok, NotFo
 			return TypedResults.NotFound();
 		}
 
+		userToUpdate.UserName = req.UserName;
+		userToUpdate.Password = req.Password;
+		userToUpdate.Email = req.Email;
+		userToUpdate.IsActive = req.IsActive;
+		userToUpdate.Posts = req.Posts;
 
-		await repo.UpdateOneAsync(req.User, req.Id); // behöver skapa ny Dto för att kunna uppdatera?
+		await repo.UpdateOneAsync(userToUpdate, req.Id);
 
 		return TypedResults.Ok();
 	}

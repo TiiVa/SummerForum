@@ -19,7 +19,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, Response>
 		await SendAsync(new Response()
 		{
 			Users = users
-		});
+		}, cancellation: ct);
 
 	}
 }

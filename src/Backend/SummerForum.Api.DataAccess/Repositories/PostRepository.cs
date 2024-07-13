@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
@@ -21,15 +22,8 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			Id = post.Id,
 			Text = post.Text,
 			StartedAt = post.StartedAt,
-			StartedBy = new UserDto
-			{
-				Id = post.StartedBy.Id,
-				UserName = post.StartedBy.UserName,
-				Email = post.StartedBy.Email,
-				Password = post.StartedBy.Password,
-				IsActive = post.StartedBy.IsActive
-			},
-			Replies = post.ListOfReplies.Select(r => new ReplyDto
+			StartedBy = post.StartedBy.Id,
+			Replies = post.Replies.Select(r => new ReplyDto
 			{
 				Id = r.Id,
 				Text = r.Text,
@@ -38,17 +32,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			}).ToList(),
 			IsActive = post.IsActive,
 			Description = post.Description,
-			Discussion = new DiscussionDto
-			{
-				Id = post.Discussion.Id,
-				Description = post.Discussion.Description,
-				IsActive = post.Discussion.IsActive,
-				Department = new DepartmentDto
-				{
-					Id = post.Discussion.Department.Id,
-					Description = post.Discussion.Department.Description
-				}
-			}
+			Discussion = post.Discussion.Id
 			
 		};
 
@@ -64,15 +48,8 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			Id = p.Id,
 			Text = p.Text,
 			StartedAt = p.StartedAt,
-			StartedBy = new UserDto
-			{
-				Id = p.StartedBy.Id,
-				UserName = p.StartedBy.UserName,
-				Email = p.StartedBy.Email,
-				Password = p.StartedBy.Password,
-				IsActive = p.StartedBy.IsActive
-			},
-			Replies = p.ListOfReplies.Select(r => new ReplyDto
+			StartedBy = p.StartedBy.Id,
+			Replies = p.Replies.Select(r => new ReplyDto
 			{
 				Id = r.Id,
 				Text = r.Text,
@@ -86,12 +63,18 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 
 	public async Task AddOneAsync(PostDto item)
 	{
+		var startedBy = await context.Users.FindAsync(item.StartedBy);
+
+		
 		var post = new Post
 		{
+			Description = item.Description,
+			StartedBy = startedBy,
 			Text = item.Text,
-			StartedBy = await context.Users.FindAsync(item.StartedBy.Id),
+			Replies = null,
 			StartedAt = item.StartedAt,
-			ListOfReplies = null
+			Discussion = null,
+			IsActive = item.IsActive
 		};
 
 		await context.Posts.AddAsync(post);
@@ -109,7 +92,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 
 		oldPost.Text = item.Text;
 		oldPost.StartedAt = item.StartedAt;
-		oldPost.StartedBy = await context.Users.FindAsync(item.StartedBy.Id);
+		oldPost.StartedBy = await context.Users.FindAsync(item.StartedBy);
 		oldPost.IsActive = item.IsActive;
 		
 		await context.SaveChangesAsync();

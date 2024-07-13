@@ -7,5 +7,5 @@ public class Department : IDepartment, IEntity<int>
 {
 	public int Id { get; set; }
 	public string Description { get; set; }
-	public virtual List<Discussion> Discussions { get; set; } = new();
+	public List<Discussion> Discussions { get; set; }
 }

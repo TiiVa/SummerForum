@@ -32,15 +32,8 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 						Id = p.Id,
 						Text = p.Text,
 						StartedAt = p.StartedAt,
-						StartedBy = new UserDto
-						{
-							Id = p.StartedBy.Id,
-							UserName = p.StartedBy.UserName,
-							Email = p.StartedBy.Email,
-							Password = p.StartedBy.Password,
-							IsActive = p.StartedBy.IsActive
-						},
-						Replies = p.ListOfReplies.Select(r => new ReplyDto
+						StartedBy = p.StartedBy.Id,
+						Replies = p.Replies.Select(r => new ReplyDto
 						{
 							Id = r.Id,
 							Text = r.Text,
@@ -66,7 +59,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		var departments = await context.Departments
 			.Include(d => d.Discussions)
 			.ThenInclude(p => p.Posts)
-			.ThenInclude(r => r.ListOfReplies)
+			.ThenInclude(r => r.Replies)
 			.Skip(start)
 			.Take(count)
 			.ToListAsync();
@@ -85,15 +78,8 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 					Id = r.Id,
 					Text = r.Text,
 					StartedAt = r.StartedAt,
-					StartedBy = new UserDto
-					{
-						Id = r.StartedBy.Id,
-						UserName = r.StartedBy.UserName,
-						Email = r.StartedBy.Email,
-						Password = r.StartedBy.Password,
-						IsActive = r.StartedBy.IsActive
-					},
-					Replies = r.ListOfReplies.Select(r => new ReplyDto
+					StartedBy = r.StartedBy.Id,
+					Replies = r.Replies.Select(r => new ReplyDto
 					{
 						Id = r.Id,
 						Text = r.Text,

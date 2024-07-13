@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Endpoints\Post\GetById\" />
+    <Folder Include="Endpoints\Post\Update\" />
     <Folder Include="Endpoints\User\Delete\" />
   </ItemGroup>
 

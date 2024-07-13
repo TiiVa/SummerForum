@@ -9,5 +9,6 @@ public class ReplyDto : IEntity<int>
 	public string Text { get; set; }
 	public DateTime RepliedAt { get; set; } = DateTime.UtcNow;
 	public UserDto RepliedBy { get; set; }
+	public PostDto BelongsToPost { get; set; }
 	public bool IsActive { get; set; }
 }

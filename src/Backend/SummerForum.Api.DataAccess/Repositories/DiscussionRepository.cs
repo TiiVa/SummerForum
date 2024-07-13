@@ -13,7 +13,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			.Include(d => d.Posts)
 			.ThenInclude(p => p.StartedBy)  // Include the StartedBy property
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.ListOfReplies)  // Include ListOfReplies
+			.ThenInclude(p => p.Replies)  // Include ListOfReplies
 			.Where(d => d.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -33,15 +33,8 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 				Id = p.Id,
 				Text = p.Text,
 				StartedAt = p.StartedAt,
-				StartedBy = new UserDto
-				{
-					Id = p.StartedBy.Id,
-					UserName = p.StartedBy.UserName,
-					Email = p.StartedBy.Email,
-					Password = p.StartedBy.Password,
-					IsActive = p.StartedBy.IsActive
-				},
-				Replies = p.ListOfReplies.Select(r => new ReplyDto
+				StartedBy = p.StartedBy.Id,
+				Replies = p.Replies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,
@@ -58,10 +51,8 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
 	{
 		var discussions = await context.Discussions
-			.Include(p => p.Posts)
-			.ThenInclude(r => r.ListOfReplies)
-			.Skip(start)
-			.Take(count)
+			.Include(p => p.Posts).ThenInclude(post => post.StartedBy).Include(discussion => discussion.Posts)
+			.ThenInclude(post => post.Replies)
 			.ToListAsync();
 
 		var discussionsToReturn = discussions.Select(d => new DiscussionDto
@@ -74,15 +65,8 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 				Id = p.Id,
 				Text = p.Text,
 				StartedAt = p.StartedAt,
-				StartedBy = new UserDto
-				{
-					Id = p.StartedBy.Id,
-					UserName = p.StartedBy.UserName,
-					Email = p.StartedBy.Email,
-					Password = p.StartedBy.Password,
-					IsActive = p.StartedBy.IsActive
-				},
-				Replies = p.ListOfReplies.Select(r => new ReplyDto
+				StartedBy = p.StartedBy.Id,
+				Replies = p.Replies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,

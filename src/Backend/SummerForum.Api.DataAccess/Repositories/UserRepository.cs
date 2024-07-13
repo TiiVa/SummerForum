@@ -22,22 +22,14 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 		foreach (var post in user.Posts)
 		{
-			var getPost = await context.Posts.FindAsync(post.Id);
+			var getPost = await context.Posts.Include(u => u.StartedBy).FirstOrDefaultAsync(p => p.Id == post.Id);
 
 			posts.Add(new PostDto
 			{
 				Id = getPost.Id,
 				Text = getPost.Text,
 				StartedAt = getPost.StartedAt,
-				StartedBy = new UserDto()
-				{
-					Id = post.StartedBy.Id,
-					UserName = post.StartedBy.UserName,
-					Email = post.StartedBy.Email,
-					Password = post.StartedBy.Password,
-					IsActive = post.StartedBy.IsActive
-
-				},
+				StartedBy = getPost.StartedBy.Id,
 
 			});
 		}

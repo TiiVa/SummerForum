@@ -10,7 +10,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 {
 	public async Task<PostDto> GetByIdAsync(int id)
 	{
-		var post = await context.Posts.FindAsync(id);
+		var post = await context.Posts.Include(u => u.StartedBy).Include(r => r.Replies).Include(d => d.Discussion).FirstOrDefaultAsync(U => U.Id == id);
 
 		if (post is null)
 		{
@@ -41,21 +41,24 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
-		var posts = await context.Posts.Skip(start).Take(count).ToListAsync();
+		var posts = await context.Posts.Where(p => p.IsActive == true).Skip(start).Take(count).ToListAsync();
 
-		var postsToReturn = posts.Select(p => new PostDto
+		var postsToReturn = posts.Select(p => new PostDto // Hämta properties från databasen
 		{
 			Id = p.Id,
+			Description = p.Description,
+			IsActive = p.IsActive,
 			Text = p.Text,
 			StartedAt = p.StartedAt,
 			StartedBy = p.StartedBy.Id,
-			Replies = p.Replies.Select(r => new ReplyDto
+			Discussion = p.Discussion.Id,
+			Replies = p.Replies != null ? p.Replies.Select(r => new ReplyDto
 			{
 				Id = r.Id,
 				Text = r.Text,
 				RepliedAt = r.RepliedAt,
 				IsActive = r.IsActive
-			}).ToList()
+			}).ToList() : new List<ReplyDto>()
 		}).ToList();
 
 		return postsToReturn;
@@ -64,17 +67,22 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 	public async Task AddOneAsync(PostDto item)
 	{
 		var startedBy = await context.Users.FindAsync(item.StartedBy);
+		var discussion = await context.Discussions.FindAsync(item.Discussion);
 
-		
 		var post = new Post
 		{
 			Description = item.Description,
 			StartedBy = startedBy,
 			Text = item.Text,
-			Replies = null,
 			StartedAt = item.StartedAt,
-			Discussion = null,
-			IsActive = item.IsActive
+			Discussion = discussion,
+			IsActive = item.IsActive,
+			Replies = item.Replies != null ? item.Replies.Select(r => new Reply
+			{
+				Id = r.Id,
+				Text = r.Text,
+				RepliedAt = r.RepliedAt
+			}).ToList() : new List<Reply>()
 		};
 
 		await context.Posts.AddAsync(post);

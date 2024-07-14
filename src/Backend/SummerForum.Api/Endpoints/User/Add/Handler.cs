@@ -17,6 +17,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, EmptyResponse>
 
 	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
+
 		var userToAdd = new UserDto()
 		{
 			UserName = req.UserName,
@@ -26,7 +27,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, EmptyResponse>
 			Posts = req.Posts != null ? req.Posts : new List<PostDto>()
 		};
 
-		if(userToAdd is null)
+		if (userToAdd is null)
 		{
 			return TypedResults.BadRequest();
 		}

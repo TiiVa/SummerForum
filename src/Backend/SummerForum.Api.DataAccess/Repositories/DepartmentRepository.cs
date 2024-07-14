@@ -98,6 +98,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		var department = new Department
 		{
 			Description = item.Description
+
 		};
 
 		await context.Departments.AddAsync(department);

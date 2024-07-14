@@ -89,7 +89,12 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			Description = item.Description,
 			IsActive = item.IsActive,
 			Department = department,
-			Posts = null
+			Posts = item.Posts != null ? item.Posts.Select(p => new Post
+			{
+				Text = p.Text,
+				StartedAt = p.StartedAt,
+				StartedBy = context.Users.Find(p.StartedBy)
+			}).ToList() : new List<Post>()
 		};
 
 		await context.Discussions.AddAsync(newDiscussion);

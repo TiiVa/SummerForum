@@ -51,8 +51,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
 		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).ToListAsync(); // Lagt till where för att filtrera bort
-                                                                                                        // users som har prop IsActive satt till false
-
+																											  // users som har prop IsActive satt till false
 		var usersToReturn = users.Select(u => new UserDto
 		{
 			Id = u.Id,
@@ -60,13 +59,20 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Email = u.Email,
 			Password = u.Password,
 			IsActive = u.IsActive,
-			Posts = u.Posts.Select(p => new PostDto
+			Posts = (u.Posts != null ? u.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
 				Text = p.Text,
-				StartedAt = p.StartedAt
-			}).ToList()
+				StartedAt = p.StartedAt,
+				Replies = (p.Replies != null ? p.Replies.Select(r => new ReplyDto
+				{
+					Id = r.Id,
+					Text = r.Text,
+					RepliedAt = r.RepliedAt,
+				}).ToList() : new List<ReplyDto>())
+			}).ToList() : new List<PostDto>())
 		}).ToList();
+
 
 		return usersToReturn;
 	}
@@ -77,7 +83,9 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 		{
 			UserName = item.UserName,
 			Email = item.Email,
-			Password = item.Password
+			Password = item.Password,
+			IsActive = item.IsActive
+
 		};
 
 		await context.Users.AddAsync(userToAdd);

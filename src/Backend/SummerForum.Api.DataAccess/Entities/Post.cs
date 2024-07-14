@@ -8,7 +8,6 @@ public class Post : IPost, IEntity<int>
 {
 	public int Id { get; set; }
 	public string Description { get; set; }
-	
 	public User StartedBy { get; set; }
 	public DateTime StartedAt { get; set; } = DateTime.UtcNow;
 	public string Text { get; set; }

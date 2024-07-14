@@ -23,8 +23,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Endpoints\Department\GetAll\" />
+    <Folder Include="Endpoints\Department\GetById\" />
+    <Folder Include="Endpoints\Department\Update\" />
+    <Folder Include="Endpoints\Discussion\Add\" />
+    <Folder Include="Endpoints\Discussion\Delete\" />
+    <Folder Include="Endpoints\Discussion\Update\" />
     <Folder Include="Endpoints\Post\GetById\" />
     <Folder Include="Endpoints\Post\Update\" />
+    <Folder Include="Endpoints\Reply\GetById\" />
+    <Folder Include="Endpoints\Reply\Update\" />
     <Folder Include="Endpoints\User\Delete\" />
   </ItemGroup>
 

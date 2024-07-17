@@ -9,6 +9,5 @@ public class Discussion : IDiscussion, IEntity<int>
 	public string Description { get; set; }
 	public bool IsActive { get; set; }
 	public List<Post> Posts { get; set; }
-	
 	public virtual Department Department { get; set; }
 }

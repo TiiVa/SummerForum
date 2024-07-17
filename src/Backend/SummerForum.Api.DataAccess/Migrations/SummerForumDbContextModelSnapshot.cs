@@ -109,11 +109,11 @@ namespace SummerForum.Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BelongsToPostId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RepliedAt")
                         .HasColumnType("datetime2");
@@ -127,7 +127,7 @@ namespace SummerForum.Api.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BelongsToPostId");
+                    b.HasIndex("PostId");
 
                     b.HasIndex("RepliedById");
 
@@ -195,11 +195,9 @@ namespace SummerForum.Api.DataAccess.Migrations
 
             modelBuilder.Entity("SummerForum.Api.DataAccess.Entities.Reply", b =>
                 {
-                    b.HasOne("SummerForum.Api.DataAccess.Entities.Post", "BelongsToPost")
+                    b.HasOne("SummerForum.Api.DataAccess.Entities.Post", "Post")
                         .WithMany("Replies")
-                        .HasForeignKey("BelongsToPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.HasOne("SummerForum.Api.DataAccess.Entities.User", "RepliedBy")
                         .WithMany()
@@ -207,7 +205,7 @@ namespace SummerForum.Api.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BelongsToPost");
+                    b.Navigation("Post");
 
                     b.Navigation("RepliedBy");
                 });

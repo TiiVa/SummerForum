@@ -41,7 +41,11 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
-		var posts = await context.Posts.Where(p => p.IsActive == true).Skip(start).Take(count).ToListAsync();
+		var posts = await context.Posts
+			.Include(p => p.StartedBy)
+			.Include(p => p.Replies)
+			.Include(p => p.Discussion)
+			.Where(p => p.IsActive == true).Skip(start).Take(count).ToListAsync();
 
 		var postsToReturn = posts.Select(p => new PostDto // Hämta properties från databasen
 		{
@@ -57,7 +61,14 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 				Id = r.Id,
 				Text = r.Text,
 				RepliedAt = r.RepliedAt,
-				IsActive = r.IsActive
+				IsActive = r.IsActive,
+				RepliedBy = r.RepliedBy != null ? new UserDto
+				{
+					Id = r.RepliedBy.Id,
+					UserName = r.RepliedBy.UserName,
+					Email = r.RepliedBy.Email,
+					IsActive = r.RepliedBy.IsActive
+				} : new UserDto()
 			}).ToList() : new List<ReplyDto>()
 		}).ToList();
 

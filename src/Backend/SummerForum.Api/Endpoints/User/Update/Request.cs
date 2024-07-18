@@ -4,7 +4,6 @@ namespace SummerForum.Api.Endpoints.User.Update;
 
 public class Request
 {
-
 	public int Id { get; set; }
 	public string UserName { get; set; }
 	public string Password { get; set; }

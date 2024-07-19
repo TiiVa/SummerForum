@@ -27,20 +27,20 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 					Id = d.Id,
 					Description = d.Description,
 					IsActive = d.IsActive,
-					Posts = d.Posts.Select(p => new PostDto
-					{
-						Id = p.Id,
-						Text = p.Text,
-						StartedAt = p.StartedAt,
-						StartedBy = p.StartedBy.Id,
-						Replies = p.Replies.Select(r => new ReplyDto
-						{
-							Id = r.Id,
-							Text = r.Text,
-							RepliedAt = r.RepliedAt,
-							IsActive = r.IsActive
-						}).ToList()
-					}).ToList()
+					//Posts = d.Posts.Select(p => new PostDto
+					//{
+					//	Id = p.Id,
+					//	Text = p.Text,
+					//	StartedAt = p.StartedAt,
+					//	StartedBy = p.StartedBy.Id,
+					//	Replies = p.Replies.Select(r => new ReplyDto
+					//	{
+					//		Id = r.Id,
+					//		Text = r.Text,
+					//		RepliedAt = r.RepliedAt,
+					//		IsActive = r.IsActive
+					//	}).ToList()
+					//}).ToList()
 				}).ToListAsync()
 		};
 
@@ -73,20 +73,20 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 				Id = p.Id,
 				Description = p.Description,
 				IsActive = p.IsActive,
-				Posts = p.Posts.Select(r => new PostDto
-				{
-					Id = r.Id,
-					Text = r.Text,
-					StartedAt = r.StartedAt,
-					StartedBy = r.StartedBy.Id,
-					Replies = r.Replies.Select(r => new ReplyDto
-					{
-						Id = r.Id,
-						Text = r.Text,
-						RepliedAt = r.RepliedAt,
-						IsActive = r.IsActive
-					}).ToList()
-				}).ToList()
+				//Posts = p.Posts.Select(r => new PostDto
+				//{
+				//	Id = r.Id,
+				//	Text = r.Text,
+				//	StartedAt = r.StartedAt,
+				//	StartedBy = r.StartedBy.Id,
+				//	Replies = r.Replies.Select(r => new ReplyDto
+				//	{
+				//		Id = r.Id,
+				//		Text = r.Text,
+				//		RepliedAt = r.RepliedAt,
+				//		IsActive = r.IsActive
+				//	}).ToList()
+				//}).ToList()
 			}).ToList()
 		}).ToList();
 
@@ -115,6 +115,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		}
 
 		oldDepartment.Description = item.Description;
+
 		await context.SaveChangesAsync();
 
 	}

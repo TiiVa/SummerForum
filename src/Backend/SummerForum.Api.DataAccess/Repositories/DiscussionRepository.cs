@@ -51,20 +51,25 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
 	{
 		var discussions = await context.Discussions
-			.Include(p => p.Posts).ThenInclude(post => post.StartedBy).Include(discussion => discussion.Posts)
-			.ThenInclude(post => post.Replies)
-			.ToListAsync();
+			.Include(p => p.Posts).ThenInclude(u => u.StartedBy)
+			.Include(d => d.Department).Include(discussion => discussion.Posts).ThenInclude(post => post.Replies).ToListAsync();
 
 		var discussionsToReturn = discussions.Select(d => new DiscussionDto
 		{
 			Id = d.Id,
 			Description = d.Description,
 			IsActive = d.IsActive,
+			Department = new DepartmentDto
+			{
+				Id = d.Department.Id,
+				Description = d.Department.Description
+			},
 			Posts = d.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
 				Text = p.Text,
 				StartedAt = p.StartedAt,
+				Description = p.Description,
 				StartedBy = p.StartedBy.Id,
 				Replies = p.Replies.Select(r => new ReplyDto
 				{

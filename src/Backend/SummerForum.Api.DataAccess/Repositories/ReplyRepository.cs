@@ -7,9 +7,9 @@ namespace SummerForum.Api.DataAccess.Repositories;
 
 public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 {
-	public async Task<ReplyDto> GetByIdAsync(int id)
+	public async Task<ReplyDto> GetByIdAsync(int id) // lagt till include Post
 	{
-		var reply = await context.Replies.Include(r => r.RepliedBy).SingleOrDefaultAsync(r => r.Id == id);
+		var reply = await context.Replies.Include(r => r.RepliedBy).Include(r => r.Post).FirstOrDefaultAsync(r => r.Id == id);
 
 		if (reply is null)
 		{
@@ -40,7 +40,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 
 	public async Task<IEnumerable<ReplyDto>> GetManyAsync(int start, int count)
 	{
-		var replies = await context.Replies.Skip(0).Take(0).ToListAsync();
+		var replies = await context.Replies.Include(u => u.RepliedBy).Skip(start).Take(count).ToListAsync();
 		
 		var repliesToReturn = replies.Select(r => new ReplyDto
 		{
@@ -63,12 +63,16 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 
 	public async Task AddOneAsync(ReplyDto item)
 	{
+		var repliedBy = await context.Users.FindAsync(item.RepliedBy);
+		var post = await context.Posts.FindAsync(item.Post);
+
 		var reply = new Reply
 		{
 			Text = item.Text,
-			RepliedBy = await context.Users.FindAsync(item.RepliedBy.Id),
+			RepliedBy = repliedBy,
 			RepliedAt = item.RepliedAt,
-			IsActive = item.IsActive
+			IsActive = item.IsActive,
+			Post = post
 		};
 
 		await context.Replies.AddAsync(reply);

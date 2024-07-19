@@ -14,21 +14,21 @@ public class Handler(IDiscussionRepository repo) : Endpoint<Request, Response>
 
 	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
-		var discussions = await repo.GetManyAsync(0, 0);
+		var discussions = await repo.GetManyAsync(req.Start, req.Count);
 
 		if (discussions is null)
 		{
 			return TypedResults.BadRequest();
 		}
 
-		SendAsync(new Response()
+		await SendAsync(new Response()
 		{
 			Discussions = discussions
-		}, cancellation : ct);
+		}, cancellation: ct);
 
 		return TypedResults.Ok();
 
 	}
 
-	// properties i posts i Discussions blir null samt department
+	
 }

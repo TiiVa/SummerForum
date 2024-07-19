@@ -50,8 +50,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).ToListAsync(); // Lagt till where för att filtrera bort
-																											  // users som har prop IsActive satt till false
+		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).ToListAsync();
 		var usersToReturn = users.Select(u => new UserDto
 		{
 			Id = u.Id,

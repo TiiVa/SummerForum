@@ -8,7 +8,7 @@ public class Request
 	public string UserName { get; set; }
 	public string Password { get; set; }
 	public string Email { get; set; }
-	public List<PostDto> Posts { get; set; } = new();
+	public List<PostDto> Posts { get; set; }
 	public bool IsActive { get; set; }
 
 	// app.MapPut("/users/{id}", async (IUserRepository repo, UserDto user, int id) =>

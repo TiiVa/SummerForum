@@ -10,10 +10,11 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	public async Task<DiscussionDto> GetByIdAsync(int id)
 	{
 		var discussion = await context.Discussions
+			.Where(d => d.IsActive == true)
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.StartedBy)  // Include the StartedBy property
+			.ThenInclude(p => p.StartedBy) 
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.Replies)  // Include ListOfReplies
+			.ThenInclude(p => p.Replies) 
 			.Where(d => d.Id == id)
 			.FirstOrDefaultAsync();
 
@@ -51,6 +52,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
 	{
 		var discussions = await context.Discussions
+			.Where(d => d.IsActive == true)
 			.Include(p => p.Posts).ThenInclude(u => u.StartedBy)
 			.Include(d => d.Department).Include(discussion => discussion.Posts).ThenInclude(post => post.Replies).ToListAsync();
 
@@ -132,7 +134,9 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			return;
 		}
 
-		context.Discussions.Remove(discussionToDelete);
+		var entityEntry = context.Discussions.Remove(discussionToDelete);
+		entityEntry.Property(d => d.IsActive).CurrentValue = false;
+
 		await context.SaveChangesAsync();
 	}
 }

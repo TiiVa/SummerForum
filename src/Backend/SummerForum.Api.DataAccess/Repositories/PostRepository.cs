@@ -10,7 +10,12 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 {
 	public async Task<PostDto> GetByIdAsync(int id)
 	{
-		var post = await context.Posts.Include(u => u.StartedBy).Include(r => r.Replies).Include(d => d.Discussion).FirstOrDefaultAsync(U => U.Id == id);
+		var post = await context.Posts
+			.Where(p => p.IsActive == true)
+			.Include(u => u.StartedBy)
+			.Include(r => r.Replies)
+			.Include(d => d.Discussion)
+			.FirstOrDefaultAsync(u => u.Id == id);
 
 		if (post is null)
 		{
@@ -42,12 +47,13 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
 		var posts = await context.Posts
+			.Where(p => p.IsActive == true)
 			.Include(p => p.StartedBy)
-			.Include(p => p.Replies)
+			.Include(p => p.Replies).ThenInclude(r => r.RepliedBy)
 			.Include(p => p.Discussion)
 			.Where(p => p.IsActive == true).Skip(start).Take(count).ToListAsync();
 
-		var postsToReturn = posts.Select(p => new PostDto // Hämta properties från databasen
+		var postsToReturn = posts.Select(p => new PostDto 
 		{
 			Id = p.Id,
 			Description = p.Description,
@@ -62,13 +68,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 				Text = r.Text,
 				RepliedAt = r.RepliedAt,
 				IsActive = r.IsActive,
-				RepliedBy = r.RepliedBy != null ? new UserDto
-				{
-					Id = r.RepliedBy.Id,
-					UserName = r.RepliedBy.UserName,
-					Email = r.RepliedBy.Email,
-					IsActive = r.RepliedBy.IsActive
-				} : new UserDto()
+				RepliedBy = r.RepliedBy.Id
 			}).ToList() : new List<ReplyDto>()
 		}).ToList();
 
@@ -88,12 +88,12 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			StartedAt = item.StartedAt,
 			Discussion = discussion,
 			IsActive = item.IsActive,
-			Replies = item.Replies != null ? item.Replies.Select(r => new Reply
+			Replies = item.Replies.Select(r => new Reply 
 			{
 				Id = r.Id,
 				Text = r.Text,
 				RepliedAt = r.RepliedAt
-			}).ToList() : new List<Reply>()
+			}).ToList()
 		};
 
 		await context.Posts.AddAsync(post);
@@ -110,9 +110,11 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 		}
 
 		oldPost.Text = item.Text;
+		oldPost.Description = item.Description;
 		oldPost.StartedAt = item.StartedAt;
 		oldPost.StartedBy = await context.Users.FindAsync(item.StartedBy);
 		oldPost.IsActive = item.IsActive;
+		oldPost.Discussion = await context.Discussions.FindAsync(item.Discussion);
 		
 		await context.SaveChangesAsync();
 	}
@@ -126,7 +128,9 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			return;
 		}
 
-		context.Posts.Remove(postToDelete);
+		var entityEntry = context.Posts.Update(postToDelete);
+		entityEntry.Property(p => p.IsActive).CurrentValue = false;
+
 		await context.SaveChangesAsync();
 	}
 }

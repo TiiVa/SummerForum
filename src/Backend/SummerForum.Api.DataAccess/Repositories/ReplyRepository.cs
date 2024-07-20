@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using SummerForum.Api.DataAccess.Entities;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
@@ -7,9 +8,11 @@ namespace SummerForum.Api.DataAccess.Repositories;
 
 public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 {
-	public async Task<ReplyDto> GetByIdAsync(int id) // lagt till include Post
+	public async Task<ReplyDto> GetByIdAsync(int id) 
 	{
-		var reply = await context.Replies.Include(r => r.RepliedBy).Include(r => r.Post).FirstOrDefaultAsync(r => r.Id == id);
+		var reply = await context.Replies.Include(r => r.RepliedBy)
+			.Include(r => r.Post)
+			.FirstOrDefaultAsync(r => r.Id == id);
 
 		if (reply is null)
 		{
@@ -20,17 +23,10 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 		{
 			Id = reply.Id,
 			Text = reply.Text,
-			RepliedBy = new UserDto
-			{
-				Id	= reply.RepliedBy.Id,
-				UserName = reply.RepliedBy.UserName,
-				Email = reply.RepliedBy.Email,
-				Password = reply.RepliedBy.Password,
-				IsActive = reply.RepliedBy.IsActive
-
-			},
+			RepliedBy = reply.RepliedBy.Id,
 			RepliedAt = reply.RepliedAt,
-			IsActive = reply.IsActive
+			IsActive = reply.IsActive,
+			Post = reply.Post.Id
 
 		};
 
@@ -40,22 +36,18 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 
 	public async Task<IEnumerable<ReplyDto>> GetManyAsync(int start, int count)
 	{
-		var replies = await context.Replies.Include(u => u.RepliedBy).Skip(start).Take(count).ToListAsync();
+		var replies = await context.Replies
+			.Include(u => u.RepliedBy)
+			.Include(r => r.Post).Skip(start).Take(count).ToListAsync();
 		
 		var repliesToReturn = replies.Select(r => new ReplyDto
 		{
 			Id = r.Id,
 			Text = r.Text,
-			RepliedBy = new UserDto
-			{
-				Id = r.RepliedBy.Id,
-				UserName = r.RepliedBy.UserName,
-				Email = r.RepliedBy.Email,
-				Password = r.RepliedBy.Password,
-				IsActive = r.RepliedBy.IsActive
-			},
+			RepliedBy = r.RepliedBy.Id,
 			RepliedAt = r.RepliedAt,
-			IsActive = r.IsActive
+			IsActive = r.IsActive,
+			Post = r.Post.Id
 		}).ToList();
 
 		return repliesToReturn;
@@ -89,7 +81,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 		}
 
 		oldReply.Text = item.Text;
-		oldReply.RepliedBy = await context.Users.FindAsync(item.RepliedBy.Id);
+		oldReply.RepliedBy = await context.Users.FindAsync(item.RepliedBy);
 		oldReply.RepliedAt = item.RepliedAt;
 		oldReply.IsActive = item.IsActive;
 
@@ -105,7 +97,9 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 			return;
 		}
 
-		context.Replies.Remove(replyToDelete);
+		var entityEntry = context.Replies.Remove(replyToDelete);
+		entityEntry.Property(r => r.IsActive).CurrentValue = false;
+
 		await context.SaveChangesAsync();
 	}
 }

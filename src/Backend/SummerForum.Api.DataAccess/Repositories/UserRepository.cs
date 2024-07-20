@@ -11,7 +11,9 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 {
 	public async Task<UserDto> GetByIdAsync(int id)
 	{
-		var user = await context.Users.Include(u => u.Posts).FirstOrDefaultAsync(c => c.Id == id);		
+		var user = await context.Users.Where(u => u.IsActive == true)
+			.Include(u => u.Posts)
+			.FirstOrDefaultAsync(c => c.Id == id);		
 		
 		if (user is null)
 		{

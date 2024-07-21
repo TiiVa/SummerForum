@@ -12,7 +12,7 @@ using SummerForum.Api.DataAccess;
 namespace SummerForum.Api.DataAccess.Migrations
 {
     [DbContext(typeof(SummerForumDbContext))]
-    [Migration("20240716195704_Second")]
+    [Migration("20240721171407_Second")]
     partial class Second
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace SummerForum.Api.DataAccess.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

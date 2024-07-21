@@ -1,4 +1,5 @@
 ﻿using FastEndpoints;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
@@ -18,14 +19,23 @@ public class Handler : Endpoint<Request, EmptyResponse>
 		AllowAnonymous();
 	}
 
-	public override async Task HandleAsync(Request req, CancellationToken ct)
+	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
+		var departments = await _repo.GetManyAsync(0, 10);
+
+		if(departments.Any(d => d.Description.Equals(req.Description)))
+		{
+			return TypedResults.BadRequest(); // returnar 200 trots att hamnar här
+
+		}
+
 		var departmentToAdd = new DepartmentDto()
 		{
 			Description = req.Description,
-			Discussions = req.Discussions != null ? req.Discussions : new List<DiscussionDto>()
 		};
 
 		await _repo.AddOneAsync(departmentToAdd);
+
+		return TypedResults.Ok();
 	}
 }

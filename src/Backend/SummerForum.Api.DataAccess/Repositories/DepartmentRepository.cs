@@ -10,7 +10,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 {
 	public async Task<DepartmentDto> GetByIdAsync(int id)
 	{
-		var department = await context.Departments.FindAsync(id);
+		var department = await context.Departments.Where(d => d.IsActive == true).FirstOrDefaultAsync(d => d.Id == id);
 
 		if (department is null)
 		{
@@ -21,6 +21,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		{
 			Id = department.Id,
 			Description = department.Description,
+			IsActive = department.IsActive,
 			Discussions = await context.Discussions.Include(p => p.Posts).Where(d => d.Department.Id == department.Id)
 				.Select(d => new DiscussionDto
 				{
@@ -57,6 +58,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 	public async Task<IEnumerable<DepartmentDto>> GetManyAsync(int start, int count)
 	{
 		var departments = await context.Departments
+			.Where(d => d.IsActive == true)
 			.Include(d => d.Discussions)
 			.ThenInclude(p => p.Posts)
 			.ThenInclude(r => r.Replies)
@@ -68,6 +70,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		{
 			Id = d.Id,
 			Description = d.Description,
+			IsActive = d.IsActive,
 			Discussions = d.Discussions.Select(p => new DiscussionDto
 			{
 				Id = p.Id,
@@ -95,9 +98,17 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 
 	public async Task AddOneAsync(DepartmentDto item)
 	{
+		var departmentExists = await context.Departments.AnyAsync(d => d.Description.Equals(item.Description));
+
+		if(departmentExists)
+		{
+			return;
+		}
+
 		var department = new Department
 		{
-			Description = item.Description
+			Description = item.Description,
+			IsActive = true
 
 		};
 
@@ -115,6 +126,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 		}
 
 		oldDepartment.Description = item.Description;
+		oldDepartment.IsActive = item.IsActive;
 
 		await context.SaveChangesAsync();
 
@@ -129,7 +141,9 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 			return;
 		}
 
-		context.Departments.Remove(departmentToDelete);
+		var entityEntry = context.Departments.Update(departmentToDelete);
+		entityEntry.Property(d => d.IsActive).CurrentValue = false;
+
 		await context.SaveChangesAsync();
 	}
 }

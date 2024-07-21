@@ -12,10 +12,8 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 		var discussion = await context.Discussions
 			.Where(d => d.IsActive == true)
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.StartedBy) 
-			.Include(d => d.Posts)
-			.ThenInclude(p => p.Replies) 
-			.Where(d => d.Id == id)
+			.ThenInclude(p => p.StartedBy).Include(discussion => discussion.Posts).ThenInclude(post => post.Replies)
+			.Include(d => d.Department).Where(d => d.Id == id)
 			.FirstOrDefaultAsync();
 
 
@@ -29,6 +27,11 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			Id = discussion.Id,
 			Description = discussion.Description,
 			IsActive = discussion.IsActive,
+			Department = new DepartmentDto
+			{
+				Id = discussion.Department.Id,
+				Description = discussion.Department.Description
+			},
 			Posts = discussion.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
@@ -94,7 +97,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 		var newDiscussion = new Discussion
 		{
 			Description = item.Description,
-			IsActive = item.IsActive,
+			IsActive = true,
 			Department = department,
 			Posts = item.Posts != null ? item.Posts.Select(p => new Post
 			{
@@ -134,7 +137,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			return;
 		}
 
-		var entityEntry = context.Discussions.Remove(discussionToDelete);
+		var entityEntry = context.Discussions.Update(discussionToDelete);
 		entityEntry.Property(d => d.IsActive).CurrentValue = false;
 
 		await context.SaveChangesAsync();

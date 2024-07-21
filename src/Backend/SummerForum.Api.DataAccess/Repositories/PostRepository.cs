@@ -87,7 +87,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			Text = item.Text,
 			StartedAt = item.StartedAt,
 			Discussion = discussion,
-			IsActive = item.IsActive,
+			IsActive = true,
 			Replies = item.Replies.Select(r => new Reply 
 			{
 				Id = r.Id,

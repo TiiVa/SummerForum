@@ -63,7 +63,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 			Text = item.Text,
 			RepliedBy = repliedBy,
 			RepliedAt = item.RepliedAt,
-			IsActive = item.IsActive,
+			IsActive = true,
 			Post = post
 		};
 
@@ -97,7 +97,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 			return;
 		}
 
-		var entityEntry = context.Replies.Remove(replyToDelete);
+		var entityEntry = context.Replies.Update(replyToDelete);
 		entityEntry.Property(r => r.IsActive).CurrentValue = false;
 
 		await context.SaveChangesAsync();

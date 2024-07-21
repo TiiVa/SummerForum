@@ -85,7 +85,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			UserName = item.UserName,
 			Email = item.Email,
 			Password = item.Password,
-			IsActive = item.IsActive
+			IsActive = true
 
 		};
 

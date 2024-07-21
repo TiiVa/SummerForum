@@ -23,6 +23,7 @@ public class Handler(IDepartmentRepository repo) : Endpoint<Request, EmptyRespon
 		}
 
 		departmentToUpdate.Description = req.Description;
+		departmentToUpdate.IsActive = req.IsActive;
 
 		await repo.UpdateOneAsync(departmentToUpdate, req.Id);
 		

@@ -11,4 +11,5 @@ public class UserDto : IEntity<int>
 	public string Email { get; set; }
 	public List<PostDto> Posts { get; set; } = new();
 	public bool IsActive { get; set; }
+	public string Role { get; set; }
 }

@@ -24,6 +24,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, EmptyResponse>
 			Email = req.Email,
 			Password = req.Password,
 			IsActive = req.IsActive,
+			Role = req.Role,
 			Posts = req.Posts != null ? req.Posts : new List<PostDto>()
 		};
 

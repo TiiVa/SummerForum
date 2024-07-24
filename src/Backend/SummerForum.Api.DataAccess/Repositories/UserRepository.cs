@@ -43,6 +43,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Email = user.Email,
 			Password = user.Password,
 			IsActive = user.IsActive,
+			Role = user.Role,
 			Posts = posts
 		};
 
@@ -60,6 +61,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Email = u.Email,
 			Password = u.Password,
 			IsActive = u.IsActive,
+			Role = u.Role,
 			Posts = (u.Posts != null ? u.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
@@ -85,7 +87,8 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			UserName = item.UserName,
 			Email = item.Email,
 			Password = item.Password,
-			IsActive = true
+			IsActive = true,
+			Role = item.Role
 
 		};
 
@@ -107,6 +110,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 		oldUser.Email = item.Email;
 		oldUser.Password = item.Password;
 		oldUser.IsActive = item.IsActive;
+		oldUser.Role = item.Role;
 		
 		await context.SaveChangesAsync();
 	}

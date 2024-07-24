@@ -27,6 +27,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, Results<Ok, NotFo
 		userToUpdate.Email = req.Email;
 		userToUpdate.IsActive = req.IsActive;
 		userToUpdate.Posts = req.Posts;
+		userToUpdate.Role = req.Role;
 
 		await repo.UpdateOneAsync(userToUpdate, req.Id);
 

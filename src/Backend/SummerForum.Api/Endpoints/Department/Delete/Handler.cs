@@ -4,7 +4,7 @@ using SummerForum.Api.DataAccess.RepositoryInterfaces;
 
 namespace SummerForum.Api.Endpoints.Department.Delete;
 
-public class Handler(IDepartmentRepository repo) : Endpoint<Request, EmptyResponse>
+public class Handler(IDepartmentRepository repo) : Endpoint<Request, Results<Ok, NotFound>>
 {
 	public override void Configure()
 	{

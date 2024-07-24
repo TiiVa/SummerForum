@@ -5,7 +5,7 @@ using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Api.Endpoints.Department.Add;
 
-public class Handler : Endpoint<Request, EmptyResponse>
+public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 {
 	private readonly IDepartmentRepository _repo;
 	public Handler(IDepartmentRepository repo)
@@ -21,18 +21,18 @@ public class Handler : Endpoint<Request, EmptyResponse>
 
 	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
-		var departments = await _repo.GetManyAsync(0, 10);
-
-		if(departments.Any(d => d.Description.Equals(req.Description)))
-		{
-			return TypedResults.BadRequest(); // returnar 200 trots att hamnar här
-
-		}
-
 		var departmentToAdd = new DepartmentDto()
 		{
 			Description = req.Description,
 		};
+
+		var departments = await _repo.GetManyAsync(0, 10);
+
+		if(departments.Any(d => d.Description.Equals(req.Description)))
+		{
+			return TypedResults.BadRequest();
+
+		}
 
 		await _repo.AddOneAsync(departmentToAdd);
 

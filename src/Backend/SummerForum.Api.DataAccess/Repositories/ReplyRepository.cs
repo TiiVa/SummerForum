@@ -10,7 +10,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 {
 	public async Task<ReplyDto> GetByIdAsync(int id) 
 	{
-		var reply = await context.Replies.Include(r => r.RepliedBy)
+		var reply = await context.Replies.Where(r => r.IsActive).Include(r => r.RepliedBy)
 			.Include(r => r.Post)
 			.FirstOrDefaultAsync(r => r.Id == id);
 
@@ -36,7 +36,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 
 	public async Task<IEnumerable<ReplyDto>> GetManyAsync(int start, int count)
 	{
-		var replies = await context.Replies
+		var replies = await context.Replies.Where(r => r.IsActive)
 			.Include(u => u.RepliedBy)
 			.Include(r => r.Post).Skip(start).Take(count).ToListAsync();
 		

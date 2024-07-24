@@ -28,20 +28,6 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 					Id = d.Id,
 					Description = d.Description,
 					IsActive = d.IsActive,
-					//Posts = d.Posts.Select(p => new PostDto
-					//{
-					//	Id = p.Id,
-					//	Text = p.Text,
-					//	StartedAt = p.StartedAt,
-					//	StartedBy = p.StartedBy.Id,
-					//	Replies = p.Replies.Select(r => new ReplyDto
-					//	{
-					//		Id = r.Id,
-					//		Text = r.Text,
-					//		RepliedAt = r.RepliedAt,
-					//		IsActive = r.IsActive
-					//	}).ToList()
-					//}).ToList()
 				}).ToListAsync()
 		};
 
@@ -62,8 +48,6 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 			.Include(d => d.Discussions)
 			.ThenInclude(p => p.Posts)
 			.ThenInclude(r => r.Replies)
-			.Skip(start)
-			.Take(count)
 			.ToListAsync();
 
 		var departmentsToReturn = departments.Select(d => new DepartmentDto
@@ -76,20 +60,6 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 				Id = p.Id,
 				Description = p.Description,
 				IsActive = p.IsActive,
-				//Posts = p.Posts.Select(r => new PostDto
-				//{
-				//	Id = r.Id,
-				//	Text = r.Text,
-				//	StartedAt = r.StartedAt,
-				//	StartedBy = r.StartedBy.Id,
-				//	Replies = r.Replies.Select(r => new ReplyDto
-				//	{
-				//		Id = r.Id,
-				//		Text = r.Text,
-				//		RepliedAt = r.RepliedAt,
-				//		IsActive = r.IsActive
-				//	}).ToList()
-				//}).ToList()
 			}).ToList()
 		}).ToList();
 
@@ -98,13 +68,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 
 	public async Task AddOneAsync(DepartmentDto item)
 	{
-		var departmentExists = await context.Departments.AnyAsync(d => d.Description.Equals(item.Description));
-
-		if(departmentExists)
-		{
-			return;
-		}
-
+		
 		var department = new Department
 		{
 			Description = item.Description,

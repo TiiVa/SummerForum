@@ -10,10 +10,10 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	public async Task<DiscussionDto> GetByIdAsync(int id)
 	{
 		var discussion = await context.Discussions
-			.Where(d => d.IsActive == true)
+			.Where(d => d.IsActive && d.Id == id)
 			.Include(d => d.Posts)
-			.ThenInclude(p => p.StartedBy).Include(discussion => discussion.Posts).ThenInclude(post => post.Replies)
-			.Include(d => d.Department).Where(d => d.Id == id)
+			.ThenInclude(p => p.StartedBy).Include(d => d.Posts).ThenInclude(post => post.Replies)
+			.Include(d => d.Department)
 			.FirstOrDefaultAsync();
 
 
@@ -35,6 +35,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 			Posts = discussion.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
+				Description = p.Description,
 				Text = p.Text,
 				StartedAt = p.StartedAt,
 				StartedBy = p.StartedBy.Id,
@@ -57,7 +58,8 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 		var discussions = await context.Discussions
 			.Where(d => d.IsActive == true)
 			.Include(p => p.Posts).ThenInclude(u => u.StartedBy)
-			.Include(d => d.Department).Include(discussion => discussion.Posts).ThenInclude(post => post.Replies).ToListAsync();
+			.Include(d => d.Department)
+			.Include(discussion => discussion.Posts).ThenInclude(post => post.Replies).ToListAsync();
 
 		var discussionsToReturn = discussions.Select(d => new DiscussionDto
 		{

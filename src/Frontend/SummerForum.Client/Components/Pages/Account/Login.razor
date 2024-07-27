@@ -1,0 +1,51 @@
+﻿@page "/Login"
+@rendermode InteractiveServer
+
+@using SummerForum.DataTransferContract.DTOs
+
+<h3>Login</h3>
+
+<EditForm Model="@User" OnValidSubmit="Authenticate" FormName="loginForm">
+	<DataAnnotationsValidator/>
+	<Div class="mb-3 text-center flex-column">
+		<h3>Login</h3>
+
+	</Div>
+	<Div class="mb-3">
+		<Label>User name</Label>
+		<InputText @bind-value="User.UserName" class="form-control" placeholder="Username"></InputText>
+		<ValidationMessage For="@(() => User.UserName)" />
+	</Div>
+	<Div class="mb-3">
+		<Label>Password</Label>
+		<InputText @bind-value="User.Password" class="form-control" placeholder="Password" type="password"></InputText>
+		<ValidationMessage For="@(() => User.Password)" />
+	</Div>
+	<Div class="mb-3 text-center">
+		<span class="text-danger">@errorMessage</span>
+
+	</Div>
+	<Div class="mb-3">
+		<Button type="submit" class="btn btn-primary">Login</Button>
+	</Div>
+</EditForm>
+
+
+
+
+
+@code {
+	[CascadingParameter]
+	public HttpContext? HttpContext { get; set; } // Borde lägga till servicar?
+	[SupplyParameterFromForm]
+	public UserDto User { get; set; } = new();
+
+	private string? errorMessage;
+
+	private async Task Authenticate()
+	{
+
+	}
+
+
+}

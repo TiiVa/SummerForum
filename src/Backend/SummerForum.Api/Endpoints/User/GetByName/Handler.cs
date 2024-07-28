@@ -10,6 +10,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, Response>
 	{
 		Get("/users/userName/{userName}");
 		AllowAnonymous();
+
 	}
 
 	public override async Task<Results<Ok,NotFound>> HandleAsync(Request req, CancellationToken ct)

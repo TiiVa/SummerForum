@@ -51,9 +51,51 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 	}
 
+	public async Task<UserDto> GetByNameAsync(string name)
+	{
+		var user = await context.Users
+			.Include(u => u.Posts)
+			.FirstOrDefaultAsync(c => c.UserName == name);
+
+		if (user is null)
+		{
+			return new UserDto();
+		}
+
+		var posts = new List<PostDto>();
+
+		foreach (var post in user.Posts)
+		{
+			var getPost = await context.Posts.Include(u => u.StartedBy).FirstOrDefaultAsync(p => p.Id == post.Id);
+
+			posts.Add(new PostDto
+			{
+				Id = getPost.Id,
+				Text = getPost.Text,
+				StartedAt = getPost.StartedAt,
+				StartedBy = getPost.StartedBy.Id,
+
+			});
+		}
+
+		var userById = new UserDto
+		{
+			Id = user.Id,
+			UserName = user.UserName,
+			Email = user.Email,
+			Password = user.Password,
+			IsActive = user.IsActive,
+			Role = user.Role,
+			Posts = posts
+		};
+
+		return userById;
+
+	}
+
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).ToListAsync();
+		var users = await context.Users.Where(u => u.IsActive == true).Include(u => u.Posts).ThenInclude(u => u.Replies).ToListAsync();
 		var usersToReturn = users.Select(u => new UserDto
 		{
 			Id = u.Id,

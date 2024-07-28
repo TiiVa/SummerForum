@@ -1,7 +1,14 @@
 ﻿@page "/Login"
 @rendermode InteractiveServer
+@inject IHttpClientFactory _httpClientFactory
+@inject NavigationManager navigationManager
+
 
 @using SummerForum.DataTransferContract.DTOs
+@using SummerForum.Client.Services
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
 
 <h3>Login</h3>
 
@@ -13,20 +20,20 @@
 	</Div>
 	<Div class="mb-3">
 		<Label>User name</Label>
-		<InputText @bind-value="User.UserName" class="form-control" placeholder="Username"></InputText>
-		<ValidationMessage For="@(() => User.UserName)" />
+		<InputText @bind-Value="User.UserName" class="form-control" placeholder="Username"></InputText>
+		<ValidationMessage For="() => User.UserName" />
 	</Div>
 	<Div class="mb-3">
 		<Label>Password</Label>
-		<InputText @bind-value="User.Password" class="form-control" placeholder="Password" type="password"></InputText>
-		<ValidationMessage For="@(() => User.Password)" />
+		<InputText @bind-Value="User.Password" class="form-control" placeholder="Password" type="password"></InputText>
+		<ValidationMessage For="() => User.Password" />
 	</Div>
 	<Div class="mb-3 text-center">
 		<span class="text-danger">@errorMessage</span>
 
 	</Div>
 	<Div class="mb-3">
-		<Button type="submit" class="btn btn-primary">Login</Button>
+		<button type="submit" class="btn btn-primary">Login</button>
 	</Div>
 </EditForm>
 
@@ -36,15 +43,35 @@
 
 @code {
 	[CascadingParameter]
-	public HttpContext? HttpContext { get; set; } // Borde lägga till servicar?
+	public HttpContext? HttpContext { get; set; } 
+
+	[Inject] private UserService UserService { get; set; }
+
 	[SupplyParameterFromForm]
-	public UserDto User { get; set; } = new();
+	private UserDto User { get; set; } = new();
 
 	private string? errorMessage;
 
 	private async Task Authenticate()
 	{
+		var userAccount = await UserService.GetByNameAsync(User.UserName);
 
+		if (userAccount is null || userAccount.Password != User.Password)
+		{
+			errorMessage = "Invalid username or password";
+			return;
+		}
+
+		var claims = new List<Claim>
+		{
+			new Claim(ClaimTypes.Name, User.UserName),
+			new Claim(ClaimTypes.Role, userAccount.Role)
+		};
+
+		var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+		var principal = new ClaimsPrincipal(identity);
+		await HttpContext.SignInAsync(principal);
+		navigationManager.NavigateTo("/");
 	}
 
 

@@ -4,8 +4,11 @@ using SummerForum.Client.Components;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using SummerForum.Client.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<UserService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

@@ -25,6 +25,19 @@ public class UserService : IService<UserDto, int>
 		return result;
 	}
 
+	public async Task<UserDto?> GetByNameAsync(string name)
+	{
+		var response = await _httpClient.GetAsync($"users/userName/{name}");
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return new UserDto();
+		}
+
+		var result = await response.Content.ReadFromJsonAsync<UserDto>();
+		return result;
+	}
+
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
 		var response = await _httpClient.GetAsync("/users");
@@ -40,16 +53,31 @@ public class UserService : IService<UserDto, int>
 
 	public async Task AddOneAsync(UserDto item)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.PostAsJsonAsync("/users", item);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
 	}
 
 	public async Task UpdateOneAsync(UserDto item, int id)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.PutAsJsonAsync($"/users/{id}", item);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
 	}
 
 	public async Task DeleteOneAsync(int id)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.DeleteAsync($"/users/{id}");
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
 	}
 }

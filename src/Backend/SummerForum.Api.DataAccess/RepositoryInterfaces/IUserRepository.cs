@@ -6,5 +6,5 @@ namespace SummerForum.Api.DataAccess.RepositoryInterfaces;
 
 public interface IUserRepository : IRepository<UserDto, int>
 {
-	// Det som är unikt för User lägger vi här
+	Task<UserDto> GetByNameAsync(string name);
 }

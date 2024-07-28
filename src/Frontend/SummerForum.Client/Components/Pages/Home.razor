@@ -1,7 +1,26 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<Div class="row">
+	<Div class="col-12">
+		<h2 class="fw-bolder">Welcome to <span class="text-danger">Summer Forum</span></h2>
+	</Div>
+	<Div class="col-12">
+		<Div class="card">
+			<Div class="card-body">
+				<AuthorizeView>
+					<NotAuthorized>
+						<span>You are not logged in. Please <a class="fw-bolder" href="/Login" >click here</a>to login.</span>
+					</NotAuthorized>
+					<Authorized>
+						<span>Logged in as <b>@context.User.Identity.Name</b> <a class="fw-bolder" href="/logout">Click here</a>to logout</span>
+					</Authorized>
+						
+				</AuthorizeView>
+			</Div>
+		</Div>
 
-Welcome to your new app.
+	</Div>
+</Div>

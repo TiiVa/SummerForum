@@ -12,7 +12,8 @@ public class UserDto : IEntity<int>
 	[Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
 	public string Password { get; set; }
 	public string Email { get; set; }
+	public string Role { get; set; }
 	public List<PostDto> Posts { get; set; } = new();
 	public bool IsActive { get; set; }
-	public string Role { get; set; }
+
 }

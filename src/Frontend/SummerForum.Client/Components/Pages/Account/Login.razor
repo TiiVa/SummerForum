@@ -1,5 +1,6 @@
 ﻿@page "/login"
 @rendermode InteractiveServer
+
 @inject IHttpClientFactory _httpClientFactory
 @inject NavigationManager navigationManager
 @inject UserService userService
@@ -21,12 +22,12 @@
 	</Div>
 	<Div class="mb-3">
 		<Label>User name</Label>
-		<InputText @bind-Value="User.UserName" class="form-control" placeholder="Username"></InputText>
+		<InputText @bind-Value="@User.UserName" class="form-control" placeholder="Username"></InputText>
 		<ValidationMessage For="() => User.UserName" />
 	</Div>
 	<Div class="mb-3">
 		<Label>Password</Label>
-		<InputText @bind-Value="User.Password" class="form-control" placeholder="Password" type="password"></InputText>
+		<InputText @bind-Value="@User.Password" class="form-control" placeholder="Password" type="password"></InputText>
 		<ValidationMessage For="() => User.Password" />
 	</Div>
 	<Div class="mb-3 text-center">
@@ -43,19 +44,28 @@
 
 
 @code {
+
+
+
 	[CascadingParameter]
-	public HttpContext? HttpContext { get; set; } 
+	public HttpContext? HttpContext { get; set; }
 
-	// private UserService UserService { get; set; }
+	[SupplyParameterFromForm] public UserDto User { get; set; } = new();
 
-	[SupplyParameterFromForm]
-	private UserDto User { get; set; } = new();
+	private List<UserDto> Users { get; set; } = new();
 
 	private string? errorMessage;
 
+	protected override async Task OnInitializedAsync()
+	{
+		Users.AddRange(await userService.GetManyAsync(0, 100));
+		await base.OnInitializedAsync();
+
+	}
+
 	private async Task Authenticate()
 	{
-		var userAccount = await userService.GetByNameAsync(User.UserName);
+		var userAccount = Users.FirstOrDefault(u => u.UserName == User.UserName);
 
 		if (userAccount is null || userAccount.Password != User.Password)
 		{

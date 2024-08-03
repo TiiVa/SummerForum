@@ -17,7 +17,6 @@
 		<br/>
         <button class="btn btn-outline-primary" @onclick="DisplayGreetingAlert">Display Greeting Alert</button>
 	</Authorized>
-		
 </AuthorizeView>
 
 @code {
@@ -34,7 +33,7 @@
     private async Task DisplayGreetingAlert()
     {
 	    var authenticationState = await authenticationStateTask;
-        var message = $"Hello, {authenticationState.User.Identity.Name}!";
+        var message = $"Hello, {authenticationState.User.Identity.Name}";
         await js.InvokeVoidAsync("alert", message);
     }
 

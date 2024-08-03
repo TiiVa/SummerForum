@@ -5,6 +5,7 @@ using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using SummerForum.Client.Services;
+using SummerForum.DataTransferContract.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 

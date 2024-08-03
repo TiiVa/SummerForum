@@ -1,6 +1,7 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 
+
 <PageTitle>Home</PageTitle>
 
 <Div class="row">
@@ -12,15 +13,13 @@
 			<Div class="card-body">
 				<AuthorizeView>
 					<NotAuthorized>
-						<span>You are not logged in. Please <a class="fw-bolder" href="/Login" >click here</a>to login.</span>
+						<span>You are not logged in. Please <a class="fw-bolder" href="/login">click here</a> to login.</span>
 					</NotAuthorized>
 					<Authorized>
-						<span>Logged in as <b>@context.User.Identity.Name</b> <a class="fw-bolder" href="/logout">Click here</a>to logout</span>
+						<span>Logged in as <b>@context.User.Identity.Name</b>. <a class="fw-bolder" href="/logout">Click here</a> to logout.</span>
 					</Authorized>
-						
 				</AuthorizeView>
 			</Div>
 		</Div>
-
 	</Div>
 </Div>

@@ -3,7 +3,7 @@ using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Client.Services;
 
-public class UserService : IService<UserDto, int>
+public class UserService : IUserService
 {
 	private readonly HttpClient _httpClient;
 
@@ -80,4 +80,17 @@ public class UserService : IService<UserDto, int>
 			return;
 		}
 	}
+
+	public async Task<UserDto> LoginAsync(UserDto user)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/login", user);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new UserDto();
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<UserDto>();
+        return result;
+    }
 }

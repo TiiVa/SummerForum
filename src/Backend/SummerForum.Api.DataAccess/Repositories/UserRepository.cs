@@ -78,7 +78,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			});
 		}
 
-		var userById = new UserDto
+		var userByName = new UserDto
 		{
 			Id = user.Id,
 			UserName = user.UserName,
@@ -89,7 +89,7 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Posts = posts
 		};
 
-		return userById;
+		return userByName;
 
 	}
 

@@ -1,5 +1,5 @@
 ﻿@page "/login"
-@rendermode InteractiveServer
+
 
 @inject IHttpClientFactory _httpClientFactory
 @inject NavigationManager navigationManager
@@ -14,7 +14,7 @@
 
 <h3>Login</h3>
 
-<EditForm Model="@User" OnValidSubmit="Authenticate" FormName="loginForm">
+<EditForm Model="UserDto" OnValidSubmit="Authenticate" FormName="loginForm">
 	<DataAnnotationsValidator/>
 	<Div class="mb-3 text-center flex-column">
 		<h3>Login</h3>
@@ -22,13 +22,13 @@
 	</Div>
 	<Div class="mb-3">
 		<Label>User name</Label>
-		<InputText @bind-Value="@User.UserName" class="form-control" placeholder="Username"></InputText>
-		<ValidationMessage For="() => User.UserName" />
+		<InputText @bind-Value="UserDto.UserName" class="form-control" placeholder="Username"></InputText>
+		<ValidationMessage For="() => UserDto.UserName" />
 	</Div>
 	<Div class="mb-3">
 		<Label>Password</Label>
-		<InputText @bind-Value="@User.Password" class="form-control" placeholder="Password" type="password"></InputText>
-		<ValidationMessage For="() => User.Password" />
+		<InputText @bind-Value="UserDto.Password" class="form-control" placeholder="Password" type="password"></InputText>
+		<ValidationMessage For="() => UserDto.Password" />
 	</Div>
 	<Div class="mb-3 text-center">
 		<span class="text-danger">@errorMessage</span>
@@ -50,24 +50,21 @@
 	[CascadingParameter]
 	public HttpContext? HttpContext { get; set; }
 
-	[SupplyParameterFromForm] public UserDto User { get; set; } = new();
+	[SupplyParameterFromForm] public UserDto UserDto { get; set; } = new();
 
 	private List<UserDto> Users { get; set; } = new();
 
 	private string? errorMessage;
 
-	protected override async Task OnInitializedAsync()
-	{
-		Users.AddRange(await userService.GetManyAsync(0, 100));
-		await base.OnInitializedAsync();
-
-	}
-
 	private async Task Authenticate()
 	{
-		var userAccount = Users.FirstOrDefault(u => u.UserName == User.UserName);
+		var users = await userService.GetManyAsync(0, 10);
 
-		if (userAccount is null || userAccount.Password != User.Password)
+		Users = users.ToList();
+
+		var userAccount = Users.FirstOrDefault(u => u.UserName == UserDto.UserName);
+
+		if (userAccount is null || userAccount.Password != UserDto.Password)
 		{
 			errorMessage = "Invalid username or password";
 			return;
@@ -75,7 +72,7 @@
 
 		var claims = new List<Claim>
 		{
-			new Claim(ClaimTypes.Name, User.UserName),
+			new Claim(ClaimTypes.Name, UserDto.UserName),
 			new Claim(ClaimTypes.Role, userAccount.Role)
 		};
 

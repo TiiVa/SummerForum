@@ -95,7 +95,8 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var users = await context.Users.Where(u => u.IsActive == true).Include(u => u.Posts).ThenInclude(u => u.Replies).ToListAsync();
+		var users = await context.Users.Where(u => u.IsActive == true).Skip(start).Take(count).Include(u => u.Posts).ThenInclude(u => u.Replies).ToListAsync();
+
 		var usersToReturn = users.Select(u => new UserDto
 		{
 			Id = u.Id,
@@ -104,18 +105,23 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Password = u.Password,
 			IsActive = u.IsActive,
 			Role = u.Role,
-			Posts = (u.Posts != null ? u.Posts.Select(p => new PostDto
+			Posts = u.Posts != null ? u.Posts.Select(p => new PostDto
 			{
 				Id = p.Id,
+				Description = p.Description,
+				StartedBy = p.StartedBy.Id,
 				Text = p.Text,
 				StartedAt = p.StartedAt,
 				Replies = (p.Replies != null ? p.Replies.Select(r => new ReplyDto
 				{
 					Id = r.Id,
 					Text = r.Text,
+					RepliedBy = r.RepliedBy.Id,
+					IsActive = r.IsActive,
+					Post = r.Post.Id,
 					RepliedAt = r.RepliedAt,
 				}).ToList() : new List<ReplyDto>())
-			}).ToList() : new List<PostDto>())
+			}).ToList() : new List<PostDto>()
 		}).ToList();
 
 

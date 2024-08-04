@@ -1,9 +1,10 @@
-﻿using SummerForum.CommonInterfaces;
+﻿using Microsoft.Extensions.FileProviders.Composite;
+using SummerForum.CommonInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Client.Services;
 
-public class UserService : IUserService
+public class UserService : IService<UserDto, int>
 {
 	private readonly HttpClient _httpClient;
 
@@ -40,15 +41,16 @@ public class UserService : IUserService
 
 	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
 	{
-		var response = await _httpClient.GetAsync("/users");
+		var response = await _httpClient.GetAsync($"/users?start={start}&count={count}");
 
 		if (!response.IsSuccessStatusCode)
 		{
 			return Enumerable.Empty<UserDto>();
 		}
 
-		var result = await response.Content.ReadFromJsonAsync<List<UserDto>>();
-		return result ?? Enumerable.Empty<UserDto>();
+
+		var result = await response.Content.ReadFromJsonAsync<UserDtoList>();
+		return result.Users ?? Enumerable.Empty<UserDto>();
 	}
 
 	public async Task AddOneAsync(UserDto item)

@@ -1,5 +1,4 @@
 ﻿using SummerForum.CommonInterfaces;
-using SummerForum.DataTransferContract.SummerForumContracts;
 
 namespace SummerForum.DataTransferContract.DTOs;
 

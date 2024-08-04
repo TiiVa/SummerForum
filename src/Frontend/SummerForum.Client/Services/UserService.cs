@@ -83,16 +83,5 @@ public class UserService : IService<UserDto, int>
 		}
 	}
 
-	public async Task<UserDto> LoginAsync(UserDto user)
-    {
-        var response = await _httpClient.PostAsJsonAsync("/login", user);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return new UserDto();
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<UserDto>();
-        return result;
-    }
+	
 }

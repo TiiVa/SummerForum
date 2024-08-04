@@ -1,21 +1,12 @@
 ﻿@page "/login"
-
-
 @inject IHttpClientFactory _httpClientFactory
 @inject NavigationManager navigationManager
-@inject UserService userService
-
-
-@using SummerForum.DataTransferContract.DTOs
-@using SummerForum.Client.Services
-@using System.Security.Claims
-@using Microsoft.AspNetCore.Authentication
-@using Microsoft.AspNetCore.Authentication.Cookies
 
 <h3>Login</h3>
 
 <EditForm Model="UserDto" OnValidSubmit="Authenticate" FormName="loginForm">
 	<DataAnnotationsValidator/>
+
 	<Div class="mb-3 text-center flex-column">
 		<h3>Login</h3>
 
@@ -38,49 +29,3 @@
 		<button type="submit" class="btn btn-primary">Login</button>
 	</Div>
 </EditForm>
-
-
-
-
-
-@code {
-
-
-
-	[CascadingParameter]
-	public HttpContext? HttpContext { get; set; }
-
-	[SupplyParameterFromForm] public UserDto UserDto { get; set; } = new();
-
-	private List<UserDto> Users { get; set; } = new();
-
-	private string? errorMessage;
-
-	private async Task Authenticate()
-	{
-		var users = await userService.GetManyAsync(0, 10);
-
-		Users = users.ToList();
-
-		var userAccount = Users.FirstOrDefault(u => u.UserName == UserDto.UserName);
-
-		if (userAccount is null || userAccount.Password != UserDto.Password)
-		{
-			errorMessage = "Invalid username or password";
-			return;
-		}
-
-		var claims = new List<Claim>
-		{
-			new Claim(ClaimTypes.Name, UserDto.UserName),
-			new Claim(ClaimTypes.Role, userAccount.Role)
-		};
-
-		var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-		var principal = new ClaimsPrincipal(identity);
-		await HttpContext.SignInAsync(principal);
-		navigationManager.NavigateTo("/");
-	}
-
-
-}

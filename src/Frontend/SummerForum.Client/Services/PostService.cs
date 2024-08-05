@@ -13,26 +13,59 @@ public class PostService : IService<PostDto, int>
 	}
 	public async Task<PostDto> GetByIdAsync(int id)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.GetAsync($"posts/{id}");
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return new PostDto();
+		}
+
+		var result = await response.Content.ReadFromJsonAsync<PostDto>();
+		return result;
 	}
 
 	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.GetAsync($"posts?start={start}&count={count}");
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return Enumerable.Empty<PostDto>();
+		}
+
+		var result = await response.Content.ReadFromJsonAsync<PostDtoList>();
+		return result.Posts ?? Enumerable.Empty<PostDto>();
 	}
 
 	public async Task AddOneAsync(PostDto item)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.PostAsJsonAsync("/posts", item);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
+
 	}
 
 	public async Task UpdateOneAsync(PostDto item, int id)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.PutAsJsonAsync($"/posts/{id}", item);
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
+
 	}
 
 	public async Task DeleteOneAsync(int id)
 	{
-		throw new NotImplementedException();
+		var response = await _httpClient.DeleteAsync($"/posts/{id}");
+
+		if (!response.IsSuccessStatusCode)
+		{
+			return;
+		}
 	}
 }

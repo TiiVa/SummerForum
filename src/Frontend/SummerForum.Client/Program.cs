@@ -10,6 +10,7 @@ using SummerForum.DataTransferContract.DTOs;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<PostService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -36,7 +37,7 @@ builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddHttpClient("SummerForumApi", client =>
 {
-	client.BaseAddress = new Uri("https://localhost:7260"); // tog https här
+	client.BaseAddress = new Uri("https://localhost:7260");
 });
 
 

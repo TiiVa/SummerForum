@@ -1,5 +1,36 @@
-﻿<h3>Posts</h3>
+﻿@page "/posts"
+@rendermode InteractiveServer
+@using SummerForum.Client.Services
+@using SummerForum.DataTransferContract.DTOs
+@using Microsoft.AspNetCore.Authorization
+@inject PostService PostService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles="Admin, User")]
+
+<h3>Posts</h3>
+
+<Virtualize Items="@AllPosts">
+	<Div class="col-12">
+		<Div class="card">
+			<Div class="card-body">
+				<h1 class="card-text">Post id: @context.Id</h1>
+				<h2>@context.Description</h2>
+			</Div>
+		</Div>
+	</Div>
+</Virtualize>
+
+
+
 
 @code {
+
+	private List<PostDto> AllPosts { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		AllPosts.AddRange(await PostService.GetManyAsync(0, 100));
+
+	}
 
 }

@@ -136,8 +136,8 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 			Email = item.Email,
 			Password = item.Password,
 			IsActive = true,
-			Role = item.Role
-
+			Role = "User"
+			
 		};
 
 		await context.Users.AddAsync(userToAdd);

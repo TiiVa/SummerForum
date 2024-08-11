@@ -1,0 +1,79 @@
+﻿@page "/register"
+@using SummerForum.Client.Services
+@using SummerForum.DataTransferContract.DTOs
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Register</PageTitle>
+
+
+<Div Margin="Margin.IsAuto.OnX" Width="Width.Is50">
+	<Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
+		Create an account
+	</Heading>
+
+	<Card Shadow="Shadow.Default">
+		<CardBody>
+			<EditForm Model="RegisterUserDto" OnValidSubmit="RegisterAccount" FormName="regidterForm">
+				<DataAnnotationsValidator />
+
+				<Div class="mb-3">
+					<Label>Username</Label>
+					<InputText @bind-Value="RegisterUserDto.UserName" class="form-control" placeholder="Username"></InputText>
+					<ValidationMessage For="() => RegisterUserDto.UserName" />
+				</Div>
+				<Div class="mb-3">
+					<Label>Email</Label>
+					<InputText @bind-Value="RegisterUserDto.Email" class="form-control" placeholder="Email"></InputText>
+					<ValidationMessage For="() => RegisterUserDto.Email" />
+				</Div>
+				<Div class="mb-3">
+					<Label>Password</Label>
+					<InputText @bind-Value="RegisterUserDto.Password" class="form-control" placeholder="Password" type="password"></InputText>
+					<ValidationMessage For="() => RegisterUserDto.Password" />
+				</Div>
+				<Div class="mb-3 text-center">
+					<span class="text-danger">@errorMessage</span>
+
+				</Div>
+				<Div class="mb-3">
+					<button type="submit" class="btn btn-primary">Register</button>
+				</Div>
+				<Field>
+					Already have an account? <Anchor To="/login" TextColor="TextColor.Primary">Login</Anchor>
+				</Field>
+			</EditForm>
+		</CardBody>
+	</Card>
+</Div>
+
+@code {
+
+	[CascadingParameter] public HttpContext? HttpContext { get; set; }
+
+	[Inject] private UserService UserService { get; set; }
+
+	[SupplyParameterFromForm] public UserDto RegisterUserDto { get; set; } = new();
+
+	private List<UserDto> Users { get; set; } = new();
+
+	private string? errorMessage;
+
+	private async Task RegisterAccount()
+	{
+		var users = await UserService.GetManyAsync(0, 10);
+
+		Users = users.ToList();
+
+		if (Users.Any(u => u.UserName == RegisterUserDto.UserName))
+		{
+			errorMessage = "Username already exists";
+			return;
+		}
+
+		await UserService.AddOneAsync(RegisterUserDto);
+	}
+
+}

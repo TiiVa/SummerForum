@@ -74,6 +74,7 @@
 		}
 
 		await UserService.AddOneAsync(RegisterUserDto);
+		NavigationManager.NavigateTo("/login");
 	}
 
 }

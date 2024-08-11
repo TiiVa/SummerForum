@@ -7,7 +7,7 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles="Admin, User")]
 
-<h3>Posts</h3>
+<PageTitle>User posts</PageTitle>
 
 <Virtualize Items="@AllPosts">
 	<Div class="col-12">

@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<DiscussionService>();
+builder.Services.AddScoped<ReplyService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

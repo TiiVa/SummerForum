@@ -6,5 +6,5 @@ namespace SummerForum.Api.DataAccess.RepositoryInterfaces;
 
 public interface IDepartmentRepository : IRepository<DepartmentDto, int>
 {
-    // Det som är unikt för Department lägger vi här
+    
 }

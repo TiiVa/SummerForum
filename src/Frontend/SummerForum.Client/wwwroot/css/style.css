@@ -1,0 +1,10 @@
+﻿.company-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+    align-items: start;
+    justify-content: start;
+}
+
+.links a {
+    margin-left: 15px;
+}

@@ -1,0 +1,32 @@
+﻿@page "/departments"
+@using Microsoft.AspNetCore.Authorization
+@using SummerForum.Client.Services
+@using SummerForum.DataTransferContract.DTOs
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin, User")]
+@inject DepartmentService DepartmentService
+
+
+<Container>
+	<Virtualize Items="@DepartmentDtos">
+		<div class="card>
+		<div class="card-body>
+			<h5 class="card-title">@context.Description</h5>
+			<p class="card-text">@context.Description</p>
+			<a href="/" class="btn btn-primary">Go somewhere</a>
+		</div>
+	</Virtualize>
+</Container>
+
+
+
+@code {
+
+	private List<DepartmentDto> DepartmentDtos { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync(0, 10));
+	}
+
+}

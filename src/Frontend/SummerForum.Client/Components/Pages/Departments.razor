@@ -9,12 +9,19 @@
 
 <Container>
 	<Virtualize Items="@DepartmentDtos">
-		<div class="card>
-		<div class="card-body>
-			<h5 class="card-title">@context.Description</h5>
-			<p class="card-text">@context.Description</p>
-			<a href="/" class="btn btn-primary">Go somewhere</a>
-		</div>
+		<Card>
+			<CardBody>
+				<CardTitle Size="3">
+					@context.Description
+				</CardTitle>
+				<CardText>
+					
+				</CardText>
+				<Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
+					See all discussions <Icon Name="IconName.ArrowRight" />
+				</Button>
+			</CardBody>
+		</Card>
 	</Virtualize>
 </Container>
 

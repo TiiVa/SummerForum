@@ -1,0 +1,40 @@
+﻿@page "/posts"
+@using SummerForum.Client.Services
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using SummerForum.DataTransferContract.DTOs
+@rendermode InteractiveServer
+@inject PostService PostService
+@attribute [Authorize(Roles = "Admin, User")]
+
+<Container>
+	<Virtualize Items="@PostDtos">
+		<Card>
+			<CardBody>
+				<CardTitle Size="3">
+					@context.Description
+				</CardTitle>
+				<CardSubtitle>
+					Discussion id: @context.Discussion
+				</CardSubtitle> 
+				<p>Started by user id: @context.StartedBy, date: @context.StartedAt</p>
+				<CardText>
+					@context.Text
+				</CardText>
+				<Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
+					See all posts <Icon Name="IconName.ArrowRight" />
+				</Button>
+			</CardBody>
+		</Card>
+	</Virtualize>
+</Container>
+
+@code {
+
+	public List<PostDto> PostDtos { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		PostDtos.AddRange(await PostService.GetManyAsync(0, 10));
+	}
+}

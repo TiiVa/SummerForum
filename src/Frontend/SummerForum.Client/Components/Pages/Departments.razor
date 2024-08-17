@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User")]
 @inject DepartmentService DepartmentService
+@inject NavigationManager NavigationManager
 
 
 <Container>
@@ -17,7 +18,7 @@
 				<CardText>
 					
 				</CardText>
-				<Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
+				<Button @onclick="ShowAllDiscussions" Color="Color.Primary" Margin="Margin.Is2.FromTop">
 					See all discussions <Icon Name="IconName.ArrowRight" />
 				</Button>
 			</CardBody>
@@ -34,6 +35,11 @@
 	protected override async Task OnInitializedAsync()
 	{
 		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync(0, 10));
+	}
+
+	private async Task ShowAllDiscussions()
+	{
+		NavigationManager.NavigateTo("/discussions");
 	}
 
 }

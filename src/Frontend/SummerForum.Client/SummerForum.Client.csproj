@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\User\Discussions.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Shared\SummerForum.CommonInterfaces\SummerForum.CommonInterfaces.csproj" />
     <ProjectReference Include="..\..\Shared\SummerForum.DataTransferContract\SummerForum.DataTransferContract.csproj" />
   </ItemGroup>
@@ -17,6 +21,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Components\Pages\Account\Login.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\User\Discussions.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +31,14 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\User\Discussions.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\Discussions.razor" />
   </ItemGroup>
 
 </Project>

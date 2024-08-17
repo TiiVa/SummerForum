@@ -5,6 +5,7 @@
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
 @inject PostService PostService
+@inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 
 <Container>
@@ -21,8 +22,8 @@
 				<CardText>
 					@context.Text
 				</CardText>
-				<Button Color="Color.Primary" Margin="Margin.Is2.FromTop">
-					See all posts <Icon Name="IconName.ArrowRight" />
+				<Button @onclick="SeeAllReplies"Color="Color.Primary" Margin="Margin.Is2.FromTop">
+					Read <Icon Name="IconName.ArrowRight" />
 				</Button>
 			</CardBody>
 		</Card>
@@ -37,4 +38,10 @@
 	{
 		PostDtos.AddRange(await PostService.GetManyAsync(0, 10));
 	}
+
+	private async Task SeeAllReplies()
+	{
+		NavigationManager.NavigateTo("/replies");
+	}
+
 }

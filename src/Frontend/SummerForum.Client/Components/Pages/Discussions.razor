@@ -1,0 +1,43 @@
+﻿@page "/discussions"
+@using SummerForum.DataTransferContract.DTOs
+@using SummerForum.Client.Services
+@using Microsoft.AspNetCore.Authorization
+@rendermode InteractiveServer
+@inject DiscussionService DiscussionService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin, User")]
+
+<Container>
+	<Virtualize Items="@DiscussionDtos">
+		<Card>
+			<CardBody>
+				<CardTitle Size="3">
+					@context.Description
+				</CardTitle>
+				@* <CardText>
+					@context.Description
+				</CardText> *@
+				<Button @onclick="SeeAllPosts" Color="Color.Primary" Margin="Margin.Is2.FromTop">
+					See all posts <Icon Name="IconName.ArrowRight" />
+				</Button>
+			</CardBody>
+		</Card>
+	</Virtualize>
+</Container>
+
+@code {
+
+
+	public List<DiscussionDto> DiscussionDtos { get; set; } = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		DiscussionDtos.AddRange(await DiscussionService.GetManyAsync(0, 10));
+	}
+
+	private async Task SeeAllPosts()
+	{
+		NavigationManager.NavigateTo("/posts");
+	}
+
+}

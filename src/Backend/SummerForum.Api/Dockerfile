@@ -10,6 +10,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Backend/SummerForum.Api/SummerForum.Api.csproj", "src/Backend/SummerForum.Api/"]
+COPY ["src/Backend/SummerForum.Api.DataAccess/SummerForum.Api.DataAccess.csproj", "src/Backend/SummerForum.Api.DataAccess/"]
+COPY ["src/Frontend/SummerForum.Client/SummerForum.Client.csproj", "src/Frontend/SummerForum.Client/"]
+COPY ["src/Shared/SummerForum.CommonInterfaces/SummerForum.CommonInterfaces.csproj", "src/Shared/SummerForum.CommonInterfaces/"]
+COPY ["src/Shared/SummerForum.DataTransferContract/SummerForum.DataTransferContract.csproj", "src/Shared/SummerForum.DataTransferContract/"]
 RUN dotnet restore "./src/Backend/SummerForum.Api/SummerForum.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Backend/SummerForum.Api"

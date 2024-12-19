@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.FileProviders.Composite;
+using SummerForum.Client.Services.ServiceInterfaces;
 using SummerForum.CommonInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Client.Services;
 
-public class UserService : IService<UserDto, int>
+public class UserService : IUserService
 {
 	private readonly HttpClient _httpClient;
 

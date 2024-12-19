@@ -7,20 +7,23 @@
 
     <main>
 	    <div class="top-row px-4">
-		    <a href="/" class="company-name">
-			    <h4>SummerForum</h4>
-		    </a>
-			<a href="/posts">Posts</a>
-		    <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-		    <AuthorizeView>
-			    <NotAuthorized >
-				    <a href="/login">Login</a>
-				    <a href="/register">Register</a>
-			    </NotAuthorized>
-			    <Authorized>
-				    <a href="/logout">Logout</a>
-			    </Authorized>
-		    </AuthorizeView>
+		    <Bar>
+			    <BarBrand>
+				    <a href="/">
+					    SummerForum
+				    </a>
+			    </BarBrand>
+			    <a href="/about">About</a>
+			    <AuthorizeView>
+				    <NotAuthorized >
+					    <a href="/login">Sign in</a>
+					    <a href="/register">Register</a>
+				    </NotAuthorized>
+				    <Authorized>
+					    <a href="/logout">Logout</a>
+				    </Authorized>
+			    </AuthorizeView>
+		    </Bar>
 	    </div>
 
 	    <article class="content px-4">

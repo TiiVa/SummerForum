@@ -5,11 +5,12 @@ using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using SummerForum.Client.Services;
+using SummerForum.Client.Services.ServiceInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<DiscussionService>();

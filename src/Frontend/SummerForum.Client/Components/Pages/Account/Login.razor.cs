@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
 using SummerForum.Client.Services;
+using SummerForum.Client.Services.ServiceInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Client.Components.Pages.Account;
@@ -11,7 +12,7 @@ public partial class Login
 {
 	[CascadingParameter] public HttpContext? HttpContext { get; set; }
 
-	[Inject] private UserService UserService { get; set; }
+	[Inject] private IUserService UserService { get; set; }
 
 	[SupplyParameterFromForm] public UserDto UserDto { get; set; } = new();
 	private List<UserDto> Users { get; set; } = new();

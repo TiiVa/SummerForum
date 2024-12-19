@@ -1,35 +1,9 @@
-﻿@page "/"
-
-<PageTitle>Home</PageTitle>
-
-<Div class="row">
-	<Div class="col-12">
-		<h2 class="fw-bolder">Welcome to <span class="text-danger">SummerForum</span></h2>
-	</Div>
-	<Div class="col-12">
-		<Div class="card">
-			<Div class="card-body">
-				<AuthorizeView>
-					<NotAuthorized>
-						<span>You are not logged in. Please <a class="fw-bolder" href="/login">click here</a> to login.</span>
-					</NotAuthorized>
-					<Authorized>
-						<span>Logged in as <b>
-							@if (context.User.Identity != null)
-							{
-								@context.User.Identity.Name
-							}
-						</b>. <a class="fw-bolder" href="/logout">Click here</a> to logout.</span>
-					</Authorized>
-				</AuthorizeView>
-			</Div>
-		</Div>
-	</Div>
-</Div>
+﻿@rendermode InteractiveServer
+@page "/about"
 
 <Container Margin="Margin.Is5.FromTop.Is5.FromBottom" Shadow="Shadow.Large">
 	<Div Margin="Margin.Is2.FromBottom.Is2.FromTop">
-		<Heading TextColor="TextColor.Primary" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">Welcome to SummerForum!</Heading>
+		<Heading Margin="Margin.Is1.FromBottom" TextAlignment="TextAlignment.Center">Welcome to SummerForum!</Heading>
 		<Paragraph Margin="Margin.Is5.FromBottom" TextAlignment="TextAlignment.Center" TextSize="TextSize.Large" TextColor="TextColor.Primary">
 			At SummerForum, we believe that great conversations bring people together. Whether you're a tech enthusiast, a health-conscious individual, or a travel adventurer, this is the place for you.
 
@@ -40,10 +14,10 @@
 			Join us today, and let's make every discussion a summer of learning and connection!
 		</Paragraph>
 	</Div>
+	
 </Container>
 
 
 @code {
+
 }
-
-

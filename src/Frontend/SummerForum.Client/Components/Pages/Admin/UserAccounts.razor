@@ -1,10 +1,38 @@
 ﻿@page "/useraccounts"
 @using Microsoft.AspNetCore.Authorization
+@using SummerForum.Client.Services.ServiceInterfaces
+@using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin")]
+@inject IUserService UserService
 
-<h3>UserAccounts</h3>
+<PageTitle>Admin/User accounts</PageTitle>
+
+<Container Margin="Margin.Is5.FromTop.Is5.FromBottom" Shadow="Shadow.Large">
+	<Virtualize Items="UserDtoList">
+			<Card Margin="Margin.Is3.FromBottom">
+				<CardBody TextAlignment="TextAlignment.Center">
+					<CardHeader>User name: @context.UserName</CardHeader>
+					<CardText>User id: @context.Id</CardText>
+					<CardText>User e-mail: @context.Email</CardText>
+					<CardText>User role: @context.Role</CardText>
+					<CardText>User status: @context.IsActive</CardText>
+					<CardText>User password: @context.Password</CardText>
+				</CardBody>
+			</Card>
+	</Virtualize>
+</Container>
+
+
 
 @code {
+
+	private List<UserDto> UserDtoList { get; set; } = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		UserDtoList.AddRange(await UserService.GetManyAsync(0, 100));
+	}
+
 
 }

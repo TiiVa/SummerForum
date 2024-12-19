@@ -2,7 +2,10 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using SummerForum.Api.DataAccess;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging();
 
 var connectionString = builder.Configuration.GetConnectionString("SummerForumDb");
 
@@ -16,5 +19,7 @@ builder.Services.AddFastEndpoints();
 var app = builder.Build();
 
 app.UseFastEndpoints();
+
+
 
 app.Run();

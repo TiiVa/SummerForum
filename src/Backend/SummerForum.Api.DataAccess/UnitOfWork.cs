@@ -11,12 +11,25 @@ public class UnitOfWork : IDisposable
 	private IUserRepository _userRepository;
 	private IDiscussionRepository _discussionRepository;
 	private IReplyRepository _replyRepository;
+	private IDepartmentRepository _departmentRepository;
 	private bool _disposed = false;
 
 
 	public UnitOfWork(SummerForumDbContext context)
 	{
 		_context = context;
+	}
+
+	public IDepartmentRepository DepartmentRepository
+	{
+		get
+		{
+			if (_departmentRepository == null)
+			{
+				_departmentRepository = new DepartmentRepository(_context);
+			}
+			return _departmentRepository;
+		}
 	}
 
 	public IPostRepository PostRepository
@@ -72,20 +85,20 @@ public class UnitOfWork : IDisposable
 		await _context.SaveChangesAsync();
 	}
 
-	protected virtual void Dispose(bool disposing)
+	protected void Dispose(bool disposing)
 	{
-		if (!this._disposed)
+		if (!_disposed)
 		{
 			if (disposing)
 			{
 				_context.Dispose();
 			}
 		}
-		this._disposed = true;
+		_disposed = true;
 	}
 	public void Dispose()
 	{
-		Dispose();
+		Dispose(true);
 		GC.SuppressFinalize(this);
 	}
 

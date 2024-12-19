@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Http.HttpResults;
+using SummerForum.Api.DataAccess;
 using SummerForum.Api.DataAccess.RepositoryInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
@@ -7,10 +8,11 @@ namespace SummerForum.Api.Endpoints.Department.Add;
 
 public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 {
-	private readonly IDepartmentRepository _repo;
-	public Handler(IDepartmentRepository repo)
+	private readonly UnitOfWork _unitOfWork;
+	
+	public Handler(UnitOfWork unitOfWork)
 	{
-		_repo = repo;
+		_unitOfWork = unitOfWork;
 	}
 
 	public override void Configure()
@@ -26,16 +28,13 @@ public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 			Description = req.Description,
 		};
 
-		var departments = await _repo.GetManyAsync(0, 10);
+		var departments = await _unitOfWork.DepartmentRepository.GetManyAsync(0, 10);
 
 		if(departments.Any(d => d.Description.Equals(req.Description)))
 		{
 			return TypedResults.BadRequest();
 
 		}
-
-		await _repo.AddOneAsync(departmentToAdd);
-
 		return TypedResults.Ok();
 	}
 }

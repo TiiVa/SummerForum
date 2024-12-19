@@ -2,9 +2,10 @@
 @using SummerForum.Client.Services
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Authorization
+@using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
-@inject PostService PostService
+@inject IPostService PostService
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 

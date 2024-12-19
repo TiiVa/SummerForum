@@ -1,9 +1,10 @@
-﻿using SummerForum.CommonInterfaces;
+﻿using SummerForum.Client.Services.ServiceInterfaces;
+using SummerForum.CommonInterfaces;
 using SummerForum.DataTransferContract.DTOs;
 
 namespace SummerForum.Client.Services;
 
-public class PostService : IService<PostDto, int>
+public class PostService : IPostService
 {
 	private readonly HttpClient _httpClient;
 

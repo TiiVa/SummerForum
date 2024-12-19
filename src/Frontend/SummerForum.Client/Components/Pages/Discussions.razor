@@ -2,8 +2,9 @@
 @using SummerForum.DataTransferContract.DTOs
 @using SummerForum.Client.Services
 @using Microsoft.AspNetCore.Authorization
+@using SummerForum.Client.Services.ServiceInterfaces
 @rendermode InteractiveServer
-@inject DiscussionService DiscussionService
+@inject IDiscussionService DiscussionService
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 

@@ -11,10 +11,10 @@ using SummerForum.DataTransferContract.DTOs;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<PostService>();
-builder.Services.AddScoped<DepartmentService>();
-builder.Services.AddScoped<DiscussionService>();
-builder.Services.AddScoped<ReplyService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDiscussionService, DiscussionService>();
+builder.Services.AddScoped<IReplyService, ReplyService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

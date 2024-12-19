@@ -1,9 +1,10 @@
 ﻿@page "/replies"
 @using SummerForum.Client.Services
 @using Microsoft.AspNetCore.Authorization
+@using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
-@inject ReplyService ReplyService
+@inject IReplyService ReplyService
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 

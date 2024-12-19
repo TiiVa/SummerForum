@@ -1,10 +1,11 @@
 ﻿@page "/departments"
 @using Microsoft.AspNetCore.Authorization
 @using SummerForum.Client.Services
+@using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User")]
-@inject DepartmentService DepartmentService
+@inject IDepartmentService DepartmentService
 @inject NavigationManager NavigationManager
 
 

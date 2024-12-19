@@ -1,9 +1,11 @@
-﻿using SummerForum.CommonInterfaces;
+﻿using SummerForum.Client.Services.ServiceInterfaces;
+using SummerForum.CommonInterfaces;
 using SummerForum.DataTransferContract.DTOs;
+using SummerForum.DataTransferContract.SummerForumContracts;
 
 namespace SummerForum.Client.Services;
 
-public class DiscussionService : IService<DiscussionDto, int>
+public class DiscussionService : IDiscussionService
 {
 	private readonly HttpClient _httpClient;
 

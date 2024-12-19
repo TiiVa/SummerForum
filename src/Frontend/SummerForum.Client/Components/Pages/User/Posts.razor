@@ -3,7 +3,8 @@
 @using SummerForum.Client.Services
 @using SummerForum.DataTransferContract.DTOs
 @using Microsoft.AspNetCore.Authorization
-@inject PostService PostService
+@using SummerForum.Client.Services.ServiceInterfaces
+@inject IPostService PostService
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles="Admin, User")]
 

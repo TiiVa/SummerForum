@@ -26,6 +26,7 @@ public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 		var departmentToAdd = new DepartmentDto()
 		{
 			Description = req.Description,
+			IsActive = req.IsActive
 		};
 
 		var departments = await _unitOfWork.DepartmentRepository.GetManyAsync(0, 10);
@@ -35,6 +36,9 @@ public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 			return TypedResults.BadRequest();
 
 		}
+
+		await _unitOfWork.DepartmentRepository.AddOneAsync(departmentToAdd);
+
 		return TypedResults.Ok();
 	}
 }

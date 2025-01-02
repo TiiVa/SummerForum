@@ -1,0 +1,36 @@
+﻿@page "/Admin/AddDepartment"
+@using SummerForum.DataTransferContract.DTOs
+@using SummerForum.Client.Services
+@using SummerForum.Client.Services.ServiceInterfaces
+@rendermode InteractiveServer
+@inject IDepartmentService DepartmentService
+
+<Card Shadow="Shadow.Large">
+	<EditForm Model="NewDepartment" OnValidSubmit="AddDepartment">
+		<DataAnnotationsValidator/>
+		<Div class="mb-3">
+			<Label>Name of department</Label>
+			<InputText @bind-Value="NewDepartment.Description" class="form-control" placeholder="Department name"></InputText>
+			<ValidationMessage For="() => NewDepartment.Description" />
+		</Div>
+		<Button Color="Color.Success" Type="ButtonType.Submit">Add new department</Button>
+	</EditForm>
+</Card>
+
+
+@code {
+	private DepartmentDto NewDepartment { get; set; } = new();
+
+	private async Task AddDepartment()
+	{
+		var newDepartment = new DepartmentDto
+		{
+			Description = NewDepartment.Description,
+			Discussions = new List<DiscussionDto>(),
+			IsActive = true
+		};
+
+		await DepartmentService.AddOneAsync(newDepartment);
+	}
+
+}

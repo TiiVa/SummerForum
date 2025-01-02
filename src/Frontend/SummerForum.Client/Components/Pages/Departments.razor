@@ -1,6 +1,5 @@
 ﻿@page "/departments"
 @using Microsoft.AspNetCore.Authorization
-@using SummerForum.Client.Services
 @using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
@@ -10,17 +9,15 @@
 
 
 <Container>
+	<Button Margin="Margin.Is2.FromBottom" Color="Color.Primary" @onclick="AddNewDepartment">Add new department</Button>
 	<Virtualize Items="@DepartmentDtos">
 		<Card>
 			<CardBody>
 				<CardTitle Size="3">
 					@context.Description
 				</CardTitle>
-				<CardText>
-					
-				</CardText>
-				<Button @onclick="ShowAllDiscussions" Color="Color.Primary" Margin="Margin.Is2.FromTop">
-					See all discussions <Icon Name="IconName.ArrowRight" />
+				<Button @onclick="() => ShowAllDiscussions(context.Id)" Color="Color.Primary" Margin="Margin.Is2.FromTop">
+					See all discussions <Icon Name="IconName.ArrowRight"/>
 				</Button>
 			</CardBody>
 		</Card>
@@ -32,15 +29,23 @@
 @code {
 
 	private List<DepartmentDto> DepartmentDtos { get; set; } = new();
+	
 
 	protected override async Task OnInitializedAsync()
 	{
 		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync(0, 10));
 	}
 
-	private async Task ShowAllDiscussions()
+	private async Task ShowAllDiscussions(int departmentId)
 	{
-		NavigationManager.NavigateTo("/discussions");
+		NavigationManager.NavigateTo("/discussions/");
+
+		// TODO: New endpoint for all discussions by department id
+	}
+
+	private async Task AddNewDepartment()
+	{
+		NavigationManager.NavigateTo("Admin/AddDepartment");
 	}
 
 }

@@ -15,6 +15,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			.Include(u => u.StartedBy)
 			.Include(r => r.Replies)
 			.Include(d => d.Discussion)
+			.AsSplitQuery()
 			.FirstOrDefaultAsync(u => u.Id == id);
 
 		if (post is null)

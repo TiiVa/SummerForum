@@ -92,6 +92,45 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 	
 	}
 
+	public async Task<IEnumerable<DiscussionDto>> GetAllByDepartment(int departmentId)
+	{
+		var discussions = await context.Discussions
+			.Where(d => d.IsActive == true && d.Department.Id == departmentId)
+			.Include(p => p.Posts).ThenInclude(u => u.StartedBy)
+			.Include(d => d.Department)
+			.Include(discussion => discussion.Posts).ThenInclude(post => post.Replies).ToListAsync();
+
+		var discussionsToReturn = discussions.Select(d => new DiscussionDto
+		{
+			Id = d.Id,
+			Description = d.Description,
+			IsActive = d.IsActive,
+			Department = new DepartmentDto
+			{
+				Id = d.Department.Id,
+				Description = d.Department.Description
+			},
+			Posts = d.Posts.Select(p => new PostDto
+			{
+				Id = p.Id,
+				Text = p.Text,
+				StartedAt = p.StartedAt,
+				Description = p.Description,
+				StartedBy = p.StartedBy.Id,
+				Replies = p.Replies.Select(r => new ReplyDto
+				{
+					Id = r.Id,
+					Text = r.Text,
+					RepliedAt = r.RepliedAt,
+					IsActive = r.IsActive
+				}).ToList()
+			}).ToList()
+		}).ToList();
+
+		return discussionsToReturn;
+
+	}
+
 	public async Task AddOneAsync(DiscussionDto item)
 	{
 		var department = await context.Departments.FindAsync(item.Department.Id);

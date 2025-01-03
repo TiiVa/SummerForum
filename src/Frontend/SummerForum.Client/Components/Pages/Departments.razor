@@ -2,14 +2,18 @@
 @using Microsoft.AspNetCore.Authorization
 @using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
+@using System.Security.Cryptography.X509Certificates
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin, User")]
 @inject IDepartmentService DepartmentService
+@inject IDiscussionService DiscussionService
 @inject NavigationManager NavigationManager
 
 
 <Container>
-	<Button Margin="Margin.Is2.FromBottom" Color="Color.Primary" @onclick="AddNewDepartment">Add new department</Button>
+	<AuthorizeView Roles="Admin">
+		<Button Margin="Margin.Is2.FromBottom" Color="Color.Primary" @onclick="AddNewDepartment">Add new department</Button>
+	</AuthorizeView>
 	<Virtualize Items="@DepartmentDtos">
 		<Card>
 			<CardBody>
@@ -22,25 +26,45 @@
 			</CardBody>
 		</Card>
 	</Virtualize>
+	@if (ShowDiscussionsByDepartment)
+	{
+		<Virtualize Items="DiscussionDtoList">
+			<Card>
+				<CardBody>
+					<CardTitle>Discussion: @context.Id</CardTitle>
+					<CardText>Description: @context.Description</CardText>
+					<CardText>Status: @context.IsActive</CardText>
+					<CardText>Department: @context.Department.Description</CardText>
+				</CardBody>
+			</Card>
+		</Virtualize>
+	}
 </Container>
+
 
 
 
 @code {
 
 	private List<DepartmentDto> DepartmentDtos { get; set; } = new();
+	private List<DiscussionDto> DiscussionDtoList { get; set; } = new();
+	private bool ShowDiscussionsByDepartment;
 	
 
 	protected override async Task OnInitializedAsync()
 	{
 		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync(0, 10));
+		DiscussionDtoList.AddRange(await DiscussionService.GetManyAsync(0, 10));
 	}
 
 	private async Task ShowAllDiscussions(int departmentId)
 	{
-		NavigationManager.NavigateTo("/discussions/");
+		var discussionsForDepartment = await DiscussionService.GetAllByDepartment(departmentId);
 
-		// TODO: New endpoint for all discussions by department id
+		DiscussionDtoList.Clear();
+		DiscussionDtoList = discussionsForDepartment.ToList();
+		ShowDiscussionsByDepartment = true;
+
 	}
 
 	private async Task AddNewDepartment()

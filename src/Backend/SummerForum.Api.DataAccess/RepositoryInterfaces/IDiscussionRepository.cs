@@ -6,5 +6,5 @@ namespace SummerForum.Api.DataAccess.RepositoryInterfaces;
 
 public interface IDiscussionRepository : IRepository<DiscussionDto, int>
 {
-	
+	Task<IEnumerable<DiscussionDto>> GetAllByDepartment(int departmentId);
 }

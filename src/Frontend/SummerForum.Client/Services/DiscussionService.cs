@@ -40,7 +40,18 @@ public class DiscussionService : IDiscussionService
 		return result.Discussions ?? Enumerable.Empty<DiscussionDto>();
 	}
 
+	public async Task<IEnumerable<DiscussionDto>> GetAllByDepartment(int departmentId)
+	{
+		var response = await _httpClient.GetAsync($"/discussions/departments/{departmentId}");
 
+		if (!response.IsSuccessStatusCode)
+		{
+			return Enumerable.Empty<DiscussionDto>();
+		}
+
+		var result = await response.Content.ReadFromJsonAsync<DiscussionDtoListByDepartment>();
+		return result.DiscussionsByDepartment ?? Enumerable.Empty<DiscussionDto>();
+	}
 
 	public async Task AddOneAsync(DiscussionDto item)
 	{

@@ -52,7 +52,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 			.Include(p => p.StartedBy)
 			.Include(p => p.Replies).ThenInclude(r => r.RepliedBy)
 			.Include(p => p.Discussion)
-			.Where(p => p.IsActive == true).Skip(start).Take(count).ToListAsync();
+			.Where(p => p.IsActive == true).ToListAsync();
 
 		var postsToReturn = posts.Select(p => new PostDto 
 		{

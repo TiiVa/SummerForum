@@ -16,5 +16,10 @@ public class SummerForumDbContext : DbContext
 
 	}
 
-	
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder
+			.UseSqlServer(
+				o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+	}
 }

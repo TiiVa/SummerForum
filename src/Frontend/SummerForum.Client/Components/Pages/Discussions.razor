@@ -9,17 +9,21 @@
 @attribute [Authorize(Roles = "Admin, User")]
 
 <Container>
+	<Button Margin="Margin.Is2.FromBottom" Color="Color.Primary" @onclick="AddNewDiscussion">Add new department</Button>
 	<Virtualize Items="@DiscussionDtos">
 		<Card>
 			<CardBody>
 				<CardTitle Size="3">
-					@context.Description
+					Discussion: @context.Id
 				</CardTitle>
-				@* <CardText>
-					@context.Description
-				</CardText> *@
+				<CardText>
+					Description: @context.Description
+				</CardText>
+				<CardText>
+					Department: @context.Department.Description
+				</CardText>
 				<Button @onclick="SeeAllPosts" Color="Color.Primary" Margin="Margin.Is2.FromTop">
-					See all posts <Icon Name="IconName.ArrowRight" />
+					See all posts <Icon Name="IconName.ArrowRight"/>
 				</Button>
 			</CardBody>
 		</Card>
@@ -36,9 +40,14 @@
 		DiscussionDtos.AddRange(await DiscussionService.GetManyAsync(0, 10));
 	}
 
-	private async Task SeeAllPosts()
+	private void SeeAllPosts()
 	{
 		NavigationManager.NavigateTo("/posts");
+	}
+
+	private void AddNewDiscussion()
+	{
+		throw new NotImplementedException();
 	}
 
 }

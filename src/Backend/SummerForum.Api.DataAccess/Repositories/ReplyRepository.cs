@@ -40,7 +40,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 	{
 		var replies = await context.Replies.Where(r => r.IsActive)
 			.Include(u => u.RepliedBy)
-			.Include(r => r.Post).Skip(start).Take(count).ToListAsync();
+			.Include(r => r.Post).ToListAsync();
 		
 		var repliesToReturn = replies.Select(r => new ReplyDto
 		{

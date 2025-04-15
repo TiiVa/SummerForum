@@ -30,7 +30,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		AllPosts.AddRange(await PostService.GetManyAsync(0, 100));
+		AllPosts.AddRange(await PostService.GetManyAsync());
 
 	}
 

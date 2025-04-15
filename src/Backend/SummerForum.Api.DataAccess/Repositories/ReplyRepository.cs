@@ -36,7 +36,7 @@ public class ReplyRepository(SummerForumDbContext context) : IReplyRepository
 		
 	}
 
-	public async Task<IEnumerable<ReplyDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<ReplyDto>> GetManyAsync()
 	{
 		var replies = await context.Replies.Where(r => r.IsActive)
 			.Include(u => u.RepliedBy)

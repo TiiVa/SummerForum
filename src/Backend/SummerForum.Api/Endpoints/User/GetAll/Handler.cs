@@ -14,7 +14,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, Response>
 
 	public override async Task HandleAsync(Request req, CancellationToken ct)
 	{
-		var users = await repo.GetManyAsync(req.Start, req.Count);
+		var users = await repo.GetManyAsync();
 
 		await SendAsync(new Response()
 		{

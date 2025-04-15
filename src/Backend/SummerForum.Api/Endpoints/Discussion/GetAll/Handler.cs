@@ -14,7 +14,7 @@ public class Handler(IDiscussionRepository repo) : Endpoint<Request, Response>
 
 	public override async Task<Results<Ok, BadRequest>> HandleAsync(Request req, CancellationToken ct)
 	{
-		var discussions = await repo.GetManyAsync(req.Start, req.Count);
+		var discussions = await repo.GetManyAsync();
 
 		if (discussions is null)
 		{

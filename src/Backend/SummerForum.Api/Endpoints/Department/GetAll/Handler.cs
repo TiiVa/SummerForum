@@ -14,7 +14,7 @@ public class Handler(IDepartmentRepository repo) : Endpoint<Request, Response>
 
 	public override async Task HandleAsync(Request req, CancellationToken ct)
 	{
-		var departments = await repo.GetManyAsync(req.Start, req.Count);
+		var departments = await repo.GetManyAsync();
 
 		await SendAsync(new Response()
 		{

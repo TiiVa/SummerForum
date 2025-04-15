@@ -37,7 +37,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		PostDtos.AddRange(await PostService.GetManyAsync(0, 10));
+		PostDtos.AddRange(await PostService.GetManyAsync());
 	}
 
 	private async Task SeeAllReplies()

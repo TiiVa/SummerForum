@@ -13,7 +13,7 @@ public class Handler(IPostRepository repo) : Endpoint<Request, Response>
 
 	public override async Task HandleAsync(Request req, CancellationToken ct)
 	{
-		var posts = await repo.GetManyAsync(req.Start, req.Count);
+		var posts = await repo.GetManyAsync();
 
 		await SendAsync(new Response()
 		{

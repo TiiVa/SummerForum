@@ -37,7 +37,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		DiscussionDtos.AddRange(await DiscussionService.GetManyAsync(0, 10));
+		DiscussionDtos.AddRange(await DiscussionService.GetManyAsync());
 	}
 
 	private void SeeAllPosts()

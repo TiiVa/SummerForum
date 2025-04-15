@@ -32,8 +32,7 @@ public class Handler(IUserRepository repo) : Endpoint<Request, EmptyResponse>
 		{
 			return TypedResults.BadRequest();
 		}
-
-		var allUsers = await repo.GetManyAsync(0, 10);
+		var allUsers = await repo.GetManyAsync();
 
 		if (allUsers.Any(u => u.Id == userToAdd.Id))
 		{

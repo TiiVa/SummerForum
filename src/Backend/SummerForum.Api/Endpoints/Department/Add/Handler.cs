@@ -28,7 +28,7 @@ public class Handler : Endpoint<Request, Results<Ok, BadRequest>>
 			IsActive = req.IsActive
 		};
 
-		var departments = await _unitOfWork.DepartmentRepository.GetManyAsync(0, 10);
+		var departments = await _unitOfWork.DepartmentRepository.GetManyAsync();
 
 		if(departments.Any(d => d.Description.Equals(req.Description)))
 		{

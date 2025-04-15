@@ -20,7 +20,7 @@ public partial class Login
 
 	private async Task Authenticate()
 	{
-		var users = await UserService.GetManyAsync(0, 10);
+		var users = await UserService.GetManyAsync();
 
 		Users = users.ToList();
 

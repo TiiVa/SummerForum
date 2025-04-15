@@ -26,9 +26,9 @@ public class ReplyService : IReplyService
 		return result;
 	}
 
-	public async Task<IEnumerable<ReplyDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<ReplyDto>> GetManyAsync()
 	{
-		var response = await _httpClient.GetAsync($"/replies?start={start}&count={count}");
+		var response = await _httpClient.GetAsync($"/replies");
 
 		if (!response.IsSuccessStatusCode)
 		{

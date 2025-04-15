@@ -53,7 +53,7 @@ public class DiscussionRepository(SummerForumDbContext context) : IDiscussionRep
 		return discussionToReturn;
 	}
 
-	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<DiscussionDto>> GetManyAsync()
 	{
 		var discussions = await context.Discussions
 			.Where(d => d.IsActive == true)

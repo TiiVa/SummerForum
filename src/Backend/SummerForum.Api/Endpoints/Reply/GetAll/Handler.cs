@@ -14,7 +14,7 @@ public class Handler(IReplyRepository repo) : Endpoint<Request, Response>
 
 	public override async Task<Results<Ok, NotFound>> HandleAsync(Request req, CancellationToken ct)
 	{
-		var replies = await repo.GetManyAsync(req.Start, req.Count);
+		var replies = await repo.GetManyAsync();
 
 		if (replies is null)
 		{

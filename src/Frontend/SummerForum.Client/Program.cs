@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
 using SummerForum.Client.Components;
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using SummerForum.Client.Services;
 using SummerForum.Client.Services.ServiceInterfaces;
-using SummerForum.DataTransferContract.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,13 +33,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 		options.LoginPath = "/login";
 		options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
 		options.AccessDeniedPath = "/access-denied";
+		options.Cookie.HttpOnly = true;
+		options.Cookie.SameSite = SameSiteMode.Strict;
 	});
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 
+
 builder.Services.AddHttpClient("SummerForumApi", client =>
 {
-	client.BaseAddress = new Uri("https://localhost:7260");
+	client.BaseAddress = new Uri("https://localhost:7261");
 });
 
 

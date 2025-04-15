@@ -45,7 +45,7 @@ public class PostRepository(SummerForumDbContext context) : IPostRepository
 		return postToReturn;
 	}
 
-	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<PostDto>> GetManyAsync()
 	{
 		var posts = await context.Posts
 			.Where(p => p.IsActive == true)

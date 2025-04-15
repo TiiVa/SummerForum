@@ -31,7 +31,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		UserDtoList.AddRange(await UserService.GetManyAsync(0, 100));
+		UserDtoList.AddRange(await UserService.GetManyAsync());
 	}
 
 

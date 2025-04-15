@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using SummerForum.Client.Services
+@using SummerForum.Client.Services.ServiceInterfaces
 @using SummerForum.DataTransferContract.DTOs
 @rendermode InteractiveServer
 @inject IHttpClientFactory HttpClientFactory
@@ -53,7 +54,7 @@
 
 	[CascadingParameter] public HttpContext? HttpContext { get; set; }
 
-	[Inject] private UserService UserService { get; set; }
+	[Inject] private IUserService UserService { get; set; }
 
 	[SupplyParameterFromForm] public UserDto RegisterUserDto { get; set; } = new();
 
@@ -63,7 +64,7 @@
 
 	private async Task RegisterAccount()
 	{
-		var users = await UserService.GetManyAsync(0, 10);
+		var users = await UserService.GetManyAsync();
 
 		Users = users.ToList();
 

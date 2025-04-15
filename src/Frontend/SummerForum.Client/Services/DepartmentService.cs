@@ -26,9 +26,9 @@ public class DepartmentService : IDepartmentService
 		return result;
 	}
 
-	public async Task<IEnumerable<DepartmentDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<DepartmentDto>> GetManyAsync()
 	{
-		var response = await _httpClient.GetAsync($"/departments?start={start}&count={count}");
+		var response = await _httpClient.GetAsync($"/departments");
 
 		if (!response.IsSuccessStatusCode)
 		{

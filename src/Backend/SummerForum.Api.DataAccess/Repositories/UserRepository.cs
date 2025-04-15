@@ -93,9 +93,13 @@ public class UserRepository(SummerForumDbContext context) : IUserRepository
 
 	}
 
-	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<UserDto>> GetManyAsync()
 	{
-		var users = await context.Users.Where(u => u.IsActive == true).Include(u => u.Posts).ThenInclude(u => u.Replies).ToListAsync();
+		var users = await context.Users
+			.Where(u => u.IsActive == true)
+			.Include(u => u.Posts)
+			.ThenInclude(u => u.Replies)
+			.ToListAsync();
 
 		var usersToReturn = users.Select(u => new UserDto
 		{

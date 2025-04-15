@@ -25,9 +25,9 @@ public class PostService : IPostService
 		return result;
 	}
 
-	public async Task<IEnumerable<PostDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<PostDto>> GetManyAsync()
 	{
-		var response = await _httpClient.GetAsync($"posts?start={start}&count={count}");
+		var response = await _httpClient.GetAsync($"posts");
 
 		if (!response.IsSuccessStatusCode)
 		{

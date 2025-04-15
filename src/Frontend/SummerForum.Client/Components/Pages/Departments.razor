@@ -53,8 +53,8 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync(0, 10));
-		DiscussionDtoList.AddRange(await DiscussionService.GetManyAsync(0, 10));
+		DepartmentDtos.AddRange(await DepartmentService.GetManyAsync());
+		DiscussionDtoList.AddRange(await DiscussionService.GetManyAsync());
 	}
 
 	private async Task ShowAllDiscussions(int departmentId)

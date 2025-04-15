@@ -40,9 +40,9 @@ public class UserService : IUserService
 		return result;
 	}
 
-	public async Task<IEnumerable<UserDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<UserDto>> GetManyAsync()
 	{
-		var response = await _httpClient.GetAsync($"/users?start={start}&count={count}");
+		var response = await _httpClient.GetAsync($"/users");
 
 		if (!response.IsSuccessStatusCode)
 		{

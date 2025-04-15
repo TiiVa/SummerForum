@@ -27,9 +27,9 @@ public class DiscussionService : IDiscussionService
 		return result;
 	}
 
-	public async Task<IEnumerable<DiscussionDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<DiscussionDto>> GetManyAsync()
 	{
-		var response = await _httpClient.GetAsync($"/discussions?start={start}&count={count}");
+		var response = await _httpClient.GetAsync($"/discussions");
 
 		if (!response.IsSuccessStatusCode)
 		{

@@ -42,7 +42,7 @@ public class DepartmentRepository(SummerForumDbContext context) : IDepartmentRep
 	/// <param name="count"></param>
 	/// <returns>Collection of departments in specified range</returns>
 
-	public async Task<IEnumerable<DepartmentDto>> GetManyAsync(int start, int count)
+	public async Task<IEnumerable<DepartmentDto>> GetManyAsync()
 	{
 		var departments = await context.Departments
 			.Where(d => d.IsActive == true)
